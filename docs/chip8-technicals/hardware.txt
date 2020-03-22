@@ -1,0 +1,61 @@
+
+### Links ###
+
+- CHIP-8 Wikipedia: https://en.wikipedia.org/wiki/CHIP-8
+- CHIP-8 Technical Reference: https://github.com/mattmikolay/chip-8/wiki/CHIP%E2%80%908-Technical-Reference
+- Cowgod's CHIP-8: http://devernay.free.fr/hacks/chip8/C8TECH10.HTM
+
+
+### CPU ###
+
+16 1byte regs (V0 to VF)
+VF also used as flag reg for some ins.
+I: address register, 2 bytes. Used for some memory adresses
+PC: proggram counter, 2 bytes
+
+### Memory ###
+
+4K (4096) bytes
+Originally, first 512 bytes occupied by interpreter. many programs start at addr 512, and do not access mem before,
+
+### Stack ###
+
+Store subroutine return addres. Original implement had size 12 (48 bytes).
+Emulator can have many more.
+Stack separated from main memory.
+@TODO Why stack is 48 bytes if size 12 ?
+
+### Timers ###
+
+2 timers, count down at 60hertz until they reach 0.
+- delay timer: can be read/write. Usually used for general purpose timing
+- sound timer: when != 0, a beep sound is made.
+
+### Input ###
+
+16 input keys: 0 to F.
+Usually 8, 4, 6, 2 used for directional input.
+They are used through 3 instructions, that behave differently if a key is pressed or not.
+
+### Timers ###
+
+### Graphics. ###
+
+Screen 64*32, monochrome.
+Drawing using sprites of size 8w, 1 to 15h.
+Sprite pixels xored with current screen pixels.
+Carry flag set if any pixel flipped from set to unset when drawing sprite
+(Used for collision detection)
+
+### Sound ###
+
+Only one interaction: beep if sound timer != 0
+
+### Instructions ###
+
+35 opcodes, 2 bytes each, in big endian.
+Several operand types:
+- 12-bits address
+- 4-bits constant
+- 8-bits constant
+- 4-bits register identifier

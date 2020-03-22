@@ -1,0 +1,27 @@
+
+Everything written in C, no extern lib, except SDL for the emulator GUI.
+Some parts written in other languages (C++ / Rust), but because they are extern to this project. (generic, used also by other projects I have)
+
+
+- Write an assembler: takes my own `.c8s` files and generate `.c8o` files (object files)
+  Use my own assembly format and directives
+  Use my own obj format
+- Write a linker: takes many `.c8o` files and create `.c8elf` file
+  Similar idea than elf file for GBA devkitARM: binary, containing all debug and symbol infos
+  Use my own elf format
+- Write a rombuilder: take a `.c8elf`, strip all debug/symbol infos to generate a valid CHIP-8 ROM.
+- Write an emulator: load CHIP-8 ROMS, or `.c8elf` file, and execute it.
+  Mode CLI (simply run it, no display/sound, can have debug infos)
+  Mode GUI with SDL
+
+- Write ODB (Obs Debugger), and make the emulator compatible with it.
+
+Compiler:
+- Write backend for irint3a that generate `.c8s` file
+- Add option to add native functions to lanexpr, so that I can run assembly written funs.
+
+
+Other Ideas (not sure I am going to do it yet, depends how the project and Covid-19 evolve):
+
+- Add debug infos to lanexpr, and to ODB, so that I can debug using the lanexpr code.
+- Build a JIT for the emulator, that emit x64 code.

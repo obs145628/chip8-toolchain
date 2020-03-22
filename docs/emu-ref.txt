@@ -1,0 +1,20 @@
+I used a working CHIP-8 emulator to compare my results.
+
+### Dependencies ###
+
+sudo apt-get install cmake libsdl2-dev
+
+### Install ###
+
+git clone https://github.com/JamesGriffin/CHIP-8-Emulator.git chip8-emu-ref
+cd chip8-emu-ref/
+mkdir build
+cd build
+cmake ..
+make
+
+### Usage ###
+
+./chip8 <rom-file>
+
+Contain game roms in `roms` folder at the git root

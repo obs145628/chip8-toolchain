@@ -1,0 +1,17 @@
+
+### Game ROMS ###
+
+Game ROMS can be found at:
+
+- https://github.com/JamesGriffin/CHIP-8-Emulator/tree/master/roms
+
+- https://github.com/badlogic/chip8/tree/master/roms (Also have sources)
+
+
+### Test Roms ###
+
+There are used to test the implem.
+
+Can be found at:
+- https://github.com/corax89/chip8-test-rom
+- https://github.com/dmatlack/chip8/tree/master/roms
