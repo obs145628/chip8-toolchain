@@ -359,3 +359,201 @@ pc <- <Addr> + <V0>
 
 Description:
 Jump to <ADDR> + V0
+
+22: OC8_IS_TYPE_RAND <X, NN> (opcode: CXNN)
+
+Operands:
+Reg X: <X>
+Imm I: <NN>
+
+Assembly Syntax:
+rand <Addr>(V0)
+
+Effects:
+V<X> <- Rand(0, 256) & <I>
+
+Description:
+Generate a number between 0 and 255 included, xor it with Immediate <I>, and store it to reg V<X>
+
+23: OC8_IS_TYPE_DRAW <X, Y, N> (opcode: DXYN)
+
+Operands:
+Reg X: <X>
+Reg Y: <Y>
+Imm I: <N>
+
+Assembly Syntax:
+draw V<X>, V<Y>, <I>
+
+Effects:
+See description
+
+Description:
+Load sprite of width 8 and height N, stored at addr of reg I. Each row is stored in one byte (1 cell per bit).
+Sprite is drawn at location (V<X>, V<Y>).
+When drawing, every bit at 1 on the sprite is flipped on the screen.
+If any bit it flipped from 1 to 0, VF is set to 1, otherwhise to 0.
+
+24: OC8_IS_TYPE_SKIP_KP <X> (opcode: EX9E)
+
+Operands:
+Reg X: <X>
+
+Assembly Syntax:
+skpp V<X>
+
+Effects:
+if (key_pressed(V<X>))
+  pc += 2
+
+Description:
+Skip the next instruction if the key stored in V<X> is pessed
+
+25: OC8_IS_TYPE_SKIP_KNP <X> (opcode: EXA1)
+
+Operands:
+Reg X: <X>
+
+Assembly Syntax:
+skpnp V<X>
+
+Effects:
+if (!key_pressed(V<X>))
+  pc += 2
+
+Description:
+Skip the next instruction if the key stored in V<X> is not pessed
+
+26: OC8_IS_TYPE_LD_DT <X> (opcode: FX07)
+
+Operands:
+Reg X: <X>
+
+Assembly Syntax:
+mov DT, V<X>
+
+Effects:
+V<X> <- DelayTimer
+
+Description:
+Set V<X> to the value of the Delay Timer.
+
+27: OC8_IS_TYPE_LD_K <X> (opcode: FX0A)
+
+Operands:
+Reg X: <X>
+
+Assembly Syntax:
+waitk V<X>
+
+Effects:
+V<X> <- wait_key()
+
+Description:
+Block the program until a key is pressed
+Set V<X> to the value of the pressed key
+
+28: OC8_IS_TYPE_ST_DT <X> (opcode: FX15)
+
+Operands:
+Reg X: <X>
+
+Assembly Syntax:
+mov V<X>, DT
+
+Effects:
+DelayTimer <- V<X>
+
+Description:
+Set the Delay Timer to V<X>
+
+29: OC8_IS_TYPE_ST_ST <X> (opcode: FX18)
+
+Operands:
+Reg X: <X>
+
+Assembly Syntax:
+mov V<X>, ST
+
+Effects:
+SountTimer <- V<X>
+
+Description:
+Set the Sound Timer to V<X>
+
+30: OC8_IS_TYPE_ADD_I <X> (opcode: FX1E)
+
+Operands:
+Reg X: <X>
+
+Assembly Syntax:
+add V<X>, I
+
+Effects:
+VF <- I + V<X> > 0xFFF ? 1 : 0
+I <- I + V<X>
+
+Description:
+Add V<X> to I.
+If the calculation overflows the valid range (0xFFF), VF is set to 1, otherwhise to 0.
+
+31: OC8_IS_TYPE_LD_F <X> (opcode: FX29)
+
+Operands:
+Reg X: <X>
+
+Assembly Syntax:
+ldhs V<X>
+
+Effects:
+I <- get_sprite_addr_of_hex_digit(V<X>)
+
+Description:
+Sets I to the location of the sprite for hexa digit char in V<X>, in 4*5 font.
+
+32: OC8_IS_TYPE_LD_B <X> (opcode: FX33)
+
+Operands:
+Reg X: <X>
+
+Assembly Syntax:
+ldbcd V<X>
+
+Effects:
+I[0:2] <- bcd(V<X>)
+
+Description:
+Compute BCD representation of V<X>, store hundreds digit at I[0], tens digit at I[1],
+and units at I[2]
+
+33: OC8_IS_TYPE_ST_REGS <X> (opcode: FX55)
+
+Operands:
+Reg X: <X>
+
+Assembly Syntax:
+movm V<X>, I
+
+Effects:
+I[0:<X>+1] <- (V0, V1, ..., V<X>)
+I <- I + <X> + 1
+
+Description:
+Store registers V0 to V<X> in order at adresses starting at I.
+Then increment I by <X> + 1
+
+33: OC8_IS_TYPE_LD_REGS <X> (opcode: FX65)
+
+Operands:
+Reg X: <X>
+
+Assembly Syntax:
+movm I, V<X>
+
+Effects:
+(V0, V1, ..., V<X>) <- I[0:<X>+1]
+I <- I + <X> + 1
+
+Description:
+Load registers V0 to V<X> in order from data at adresses starting at I.
+Then increment I by <X> + 1

@@ -183,3 +183,97 @@ TEST_CASE("Ins 21: BNNN", "") {
   REQUIRE(ins.type == OC8_IS_TYPE_JMP_V0);
   REQUIRE(ins.operands[0] == 0x3CE);
 }
+
+TEST_CASE("Ins 22: CXNN", "") {
+  oc8_is_ins_t ins;
+  decode_op(&ins, "C38E");
+  REQUIRE(ins.type == OC8_IS_TYPE_RAND);
+  REQUIRE(ins.operands[0] == 0x3);
+  REQUIRE(ins.operands[1] == 0x8E);
+}
+
+TEST_CASE("Ins 23: DXYN", "") {
+  oc8_is_ins_t ins;
+  decode_op(&ins, "D81C");
+  REQUIRE(ins.type == OC8_IS_TYPE_DRAW);
+  REQUIRE(ins.operands[0] == 0x8);
+  REQUIRE(ins.operands[1] == 0x1);
+  REQUIRE(ins.operands[2] == 0xC);
+}
+
+TEST_CASE("Ins 24: EX9E", "") {
+  oc8_is_ins_t ins;
+  decode_op(&ins, "E69E");
+  REQUIRE(ins.type == OC8_IS_TYPE_SKIP_KP);
+  REQUIRE(ins.operands[0] == 0x6);
+}
+
+TEST_CASE("Ins 25: EXA1", "") {
+  oc8_is_ins_t ins;
+  decode_op(&ins, "E6A1");
+  REQUIRE(ins.type == OC8_IS_TYPE_SKIP_KNP);
+  REQUIRE(ins.operands[0] == 0x6);
+}
+
+TEST_CASE("Ins 26: FX07", "") {
+  oc8_is_ins_t ins;
+  decode_op(&ins, "F607");
+  REQUIRE(ins.type == OC8_IS_TYPE_LD_DT);
+  REQUIRE(ins.operands[0] == 0x6);
+}
+
+TEST_CASE("Ins 27: FX0A", "") {
+  oc8_is_ins_t ins;
+  decode_op(&ins, "F60A");
+  REQUIRE(ins.type == OC8_IS_TYPE_LD_K);
+  REQUIRE(ins.operands[0] == 0x6);
+}
+
+TEST_CASE("Ins 28: FX15", "") {
+  oc8_is_ins_t ins;
+  decode_op(&ins, "F615");
+  REQUIRE(ins.type == OC8_IS_TYPE_ST_DT);
+  REQUIRE(ins.operands[0] == 0x6);
+}
+
+TEST_CASE("Ins 29: FX18", "") {
+  oc8_is_ins_t ins;
+  decode_op(&ins, "F618");
+  REQUIRE(ins.type == OC8_IS_TYPE_ST_ST);
+  REQUIRE(ins.operands[0] == 0x6);
+}
+
+TEST_CASE("Ins 30: FX1E", "") {
+  oc8_is_ins_t ins;
+  decode_op(&ins, "F61E");
+  REQUIRE(ins.type == OC8_IS_TYPE_ADD_I);
+  REQUIRE(ins.operands[0] == 0x6);
+}
+
+TEST_CASE("Ins 31: FX29", "") {
+  oc8_is_ins_t ins;
+  decode_op(&ins, "F629");
+  REQUIRE(ins.type == OC8_IS_TYPE_LD_F);
+  REQUIRE(ins.operands[0] == 0x6);
+}
+
+TEST_CASE("Ins 32: FX33", "") {
+  oc8_is_ins_t ins;
+  decode_op(&ins, "F633");
+  REQUIRE(ins.type == OC8_IS_TYPE_LD_B);
+  REQUIRE(ins.operands[0] == 0x6);
+}
+
+TEST_CASE("Ins 33: FX55", "") {
+  oc8_is_ins_t ins;
+  decode_op(&ins, "F655");
+  REQUIRE(ins.type == OC8_IS_TYPE_ST_REGS);
+  REQUIRE(ins.operands[0] == 0x6);
+}
+
+TEST_CASE("Ins 34: FX65", "") {
+  oc8_is_ins_t ins;
+  decode_op(&ins, "FA65");
+  REQUIRE(ins.type == OC8_IS_TYPE_LD_REGS);
+  REQUIRE(ins.operands[0] == 0xA);
+}
