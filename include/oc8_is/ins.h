@@ -22,7 +22,7 @@ extern "C" {
 typedef enum {
   OC8_IS_TYPE_SYS,         // 0NNN
   OC8_IS_TYPE_CLS,         // 00E0
-  OC8_IS_TYPE_RET,         // 00E0
+  OC8_IS_TYPE_RET,         // 00EE
   OC8_IS_TYPE_JMP,         // 1NNN
   OC8_IS_TYPE_CALL,        // 2NNN
   OC8_IS_TYPE_SKIP_E_IMM,  // 3XNN

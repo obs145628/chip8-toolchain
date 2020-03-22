@@ -12,6 +12,8 @@ operand types:
 
 For every instruction, there is also an assembly syntax. This is personal choice for my assembler, and not standard.
 
+Some instructions set the Flag registers VF. It is set only if precised
+
 They are 35 different instructions:
 
 0: OC8_IS_TYPE_SYS <NNN> (opcode: 0NNN)
@@ -27,3 +29,333 @@ Program aborts
 
 Description:
 Call native program at address <Addr>. Not implemented.
+
+1: OC8_IS_TYPE_CLS (opcode: 00E0)
+
+
+Assembly Syntax:
+cls
+
+Effects:
+screen_mat[::] <- 0
+
+Description:
+Clear the whole screen
+
+2: OC8_IS_TYPE_RET (opcode: 00E0)
+
+Assembly Syntax:
+ret
+
+Effects:
+pc <- stack.pop()
+
+Description:
+Returns from the current subsoutine
+
+
+3: OC8_IS_TYPE_JMP <NNN> (opcode: 1NNN)
+
+Operands:
+Addr: <NNN>
+
+Assembly Syntax:
+jmp <Addr>
+
+Effects:
+pc <- <Addr>
+
+Description:
+Jump to address <Addr>
+
+4: OC8_IS_TYPE_CALL <NNN> (opcode: 2NNN)
+
+Operands:
+Addr: <NNN>
+
+Assembly Syntax:
+call <Addr>
+
+Effects:
+stack.push(pc + 2) #next ins
+pc <- <Addr>
+
+Description:
+Cat subroutine at <Addr>
+
+5: OC8_IS_TYPE_SKIP_E_IMM <X, NN> (opcode: 3XNN)
+
+Operands:
+Reg X: <X>
+Immediate I: <NN>
+
+Assembly Syntax:
+skpe I, V<X>, 
+
+Effects:
+if (Vx == I)
+   pc += 2
+
+Description:
+Skip next instruction if VX == I
+
+6: OC8_IS_TYPE_SKIP_NE_IMM <X, NN> (opcode: 4XNN)
+
+Operands:
+Reg X: <X>
+Immediate I: <NN>
+
+Assembly Syntax:
+skpne I, V<X>, 
+
+Effects:
+if (VX != I)
+   pc += 2
+
+Description:
+Skip next instruction if VX != I
+
+7: OC8_IS_TYPE_SKIP_E_REG <X, Y> (opcode: 5XY0)
+
+Operands:
+Reg X: <X>
+Reg Y: <Y>
+
+Assembly Syntax:
+skpe V<Y>, V<X>, 
+
+Effects:
+if (VY == VX)
+   pc += 2
+
+Description:
+Skip next instruction if VX == VY
+
+8: OC8_IS_TYPE_LD_IMM <X, NN> (opcode: 6XNN)
+
+Operands:
+Reg X: <X>
+Imm I: <NN>
+
+Assembly Syntax:
+mov I, V<X>
+
+Effects:
+Vx <- I
+
+Description:
+Load immediate 8bit val to register
+
+9: OC8_IS_TYPE_ADD_IMM <X, NN> (opcode: 7XNN)
+
+Operands:
+Reg X: <X>
+Imm I: <NN>
+
+Assembly Syntax:
+add I, V<X>
+
+Effects:
+VX <- VX + I
+
+Description:
+Add 8b immediate value I to register VX
+
+10: OC8_IS_TYPE_LD_REG <X, Y> (opcode: 8XY0)
+
+Operands:
+Reg X: <X>
+Reg Y: <Y>
+
+Assembly Syntax:
+mov V<Y>, V<X>
+
+Effects:
+VX <- VY
+
+Description:
+Load value of reg V<Y> into reg <X>
+
+11: OC8_IS_TYPE_OR <X, Y> (opcode: 8XY1)
+
+Operands:
+Reg X: <X>
+Reg Y: <Y>
+
+Assembly Syntax:
+or V<Y>, V<X>
+
+Effects:
+VX <- VX | VY
+
+Description:
+Or V<X> with V<Y> and store back result in V<X>
+
+12: OC8_IS_TYPE_AND <X, Y> (opcode: 8XY2)
+
+Operands:
+Reg X: <X>
+Reg Y: <Y>
+
+Assembly Syntax:
+and V<Y>, V<X>
+
+Effects:
+VX <- VX & VY
+
+Description:
+And V<X> with V<Y> and store back result in V<X>
+
+13: OC8_IS_TYPE_XOR <X, Y> (opcode: 8XY3)
+
+Operands:
+Reg X: <X>
+Reg Y: <Y>
+
+Assembly Syntax:
+xor V<Y>, V<X>
+
+Effects:
+VX <- VX ^ VY
+
+Description:
+Xor V<X> with V<Y> and store back result in V<X>
+
+14: OC8_IS_TYPE_ADD_REG <X, Y> (opcode: 8XY4)
+
+Operands:
+Reg X: <X>
+Reg Y: <Y>
+
+Assembly Syntax:
+add V<Y>, V<X>
+
+Effects:
+VF <- VX + VY > 255 ? 1 : 0
+VX <- VX + VY
+
+Description:
+Add V<Y> to V<X> and store back result in V<X>
+Set VF to 1 if there is carry, otherwhise to 0
+
+15: OC8_IS_TYPE_SUB <X, Y> (opcode: 8XY5)
+
+Operands:
+Reg X: <X>
+Reg Y: <Y>
+
+Assembly Syntax:
+sub V<Y>, V<X>
+
+Effects:
+VF <- VX > Vy ? 1 : 0
+VX <- VX - VY
+
+
+Description:
+Substract V<Y> from V<Y> and store back result in V<X>
+Set VF to 0 if there is borrow, otherwhise to 1
+
+16: OC8_IS_TYPE_SHR <X, Y> (opcode: 8XY7)
+
+Operands:
+Reg X: <X>
+Reg Y: <Y>
+
+Assembly Syntax:
+shr V<Y>, V<X>
+
+Effects:
+VF <- VY & 0x1
+VX <- VY >> 1
+
+Description:
+Do a logical shift right of V<Y>, and store result in V<X>
+Set VF to 1 is the least significant bit of V<Y> is set, otherwhise to 0
+(prior to shifting)
+
+@TODO Some inplems of shr ignore V<Y>, they load and store from V<X>. Which to do ?
+
+17: OC8_IS_TYPE_SUBN <X, Y> (opcode: 8XY7)
+
+Operands:
+Reg X: <X>
+Reg Y: <Y>
+
+Assembly Syntax:
+subn V<Y>, V<X>
+
+Effects:
+VF <- VY > VX ? 1 : 0
+VX <- VY - VX
+
+
+Description:
+Substract V<X> from V<Y> and store back result in V<X>
+Set VF to 0 if there is borrow, otherwhise to 1
+
+18: OC8_IS_TYPE_SHL <X, Y> (opcode: 8XYE)
+
+Operands:
+Reg X: <X>
+Reg Y: <Y>
+
+Assembly Syntax:
+shl V<Y>, V<X>
+
+Effects:
+VF <- VY & 0x80 ? 1 : 0
+VX <- VY << 1
+
+Description:
+Do a logical shift left of V<Y>, and store result in V<X>
+Set VF to 1 is the most significant bit of V<Y> is set, otherwhise to 0
+(prior to shifting)
+
+@TODO Some inplems of shl ignore V<Y>, they load and store from V<X>. Which to do ?
+
+19: OC8_IS_TYPE_SKIP_NE_REG <X, Y> (opcode: 9XY0)
+
+Operands:
+Reg X: <X>
+Reg Y: <Y>
+
+Assembly Syntax:
+skipne V<Y>, V<X>
+
+Effects:
+if (VY != VX)
+  pc += 2
+
+
+
+Description:
+Skip next instruction if VY != VX
+
+20: OC8_IS_TYPE_ST_I <NNN> (opcode: ANNN)
+
+Operands:
+Addr: <NNN>
+
+Assembly Syntax:
+mov <Addr>, I
+
+Effects:
+I <- <Addr>
+
+Description:
+Set the address stored in I at <Addr>
+
+21: OC8_IS_TYPE_JMP_V0 <NNN> (opcode: BNNN)
+
+Operands:
+Addr: <NNN>
+
+Assembly Syntax:
+jmp <Addr>(V0)
+
+Effects:
+pc <- <Addr> + <V0>
+
+Description:
+Jump to <ADDR> + V0
