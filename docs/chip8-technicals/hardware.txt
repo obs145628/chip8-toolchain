@@ -18,6 +18,7 @@ PC: proggram counter, 2 bytes
 4K (4096) bytes
 Originally, first 512 bytes occupied by interpreter. many programs start at addr 512, and do not access mem before,
 
+
 ### Stack ###
 
 Store subroutine return addres. Original implement had size 12 (48 bytes).

@@ -1,0 +1,29 @@
+
+All instructions are encdoded by 2 bytes, in big endian.
+
+Every instruction has between 0 and 3 operands
+<opname> <operand1>, <operand2>, ...
+
+operand types:
+- X/Y: 4bits to represent a register index
+- N: 4bits immediate
+- NN: 8 bits immediate
+- NNN: 12 bits immediate, only used to represent an address
+
+For every instruction, there is also an assembly syntax. This is personal choice for my assembler, and not standard.
+
+They are 35 different instructions:
+
+0: OC8_IS_TYPE_SYS <NNN> (opcode: 0NNN)
+
+Operands:
+Addr: <NNN>
+
+Assembly Syntax:
+sys <Addr>
+
+Effects:
+Program aborts
+
+Description:
+Call native program at address <Addr>. Not implemented.
