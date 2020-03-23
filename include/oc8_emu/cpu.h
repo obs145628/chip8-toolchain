@@ -20,6 +20,7 @@ extern "C" {
 #endif
 
 #define OC8_EMU_NB_REGS (16)
+#define OC8_EMU_REG_FLAG (0xF)
 
 /// All data needed by the CHIP-8 CPU
 typedef struct {
@@ -44,6 +45,9 @@ typedef struct {
   // Set to 1 if tried to exec waitk (FX0A), and no key where available
   // Otherwhise set to 0
   int block_waitq;
+
+  // Used by CXNN to generate random numbers
+  unsigned long rg_seed;
 
 } oc8_emu_cpu_t;
 

@@ -42,6 +42,9 @@ screen_mat[::] <- 0
 Description:
 Clear the whole screen
 
+
+
+
 2: OC8_IS_TYPE_RET (opcode: 00E0)
 
 Assembly Syntax:
@@ -52,6 +55,9 @@ pc <- stack.pop()
 
 Description:
 Returns from the current subsoutine
+
+
+
 
 
 3: OC8_IS_TYPE_JMP <NNN> (opcode: 1NNN)
@@ -68,6 +74,10 @@ pc <- <Addr>
 Description:
 Jump to address <Addr>
 
+
+
+
+
 4: OC8_IS_TYPE_CALL <NNN> (opcode: 2NNN)
 
 Operands:
@@ -82,6 +92,10 @@ pc <- <Addr>
 
 Description:
 Cat subroutine at <Addr>
+
+
+
+
 
 5: OC8_IS_TYPE_SKIP_E_IMM <X, NN> (opcode: 3XNN)
 
@@ -99,6 +113,11 @@ if (Vx == I)
 Description:
 Skip next instruction if VX == I
 
+
+
+
+
+
 6: OC8_IS_TYPE_SKIP_NE_IMM <X, NN> (opcode: 4XNN)
 
 Operands:
@@ -114,6 +133,10 @@ if (VX != I)
 
 Description:
 Skip next instruction if VX != I
+
+
+
+
 
 7: OC8_IS_TYPE_SKIP_E_REG <X, Y> (opcode: 5XY0)
 
@@ -131,6 +154,11 @@ if (VY == VX)
 Description:
 Skip next instruction if VX == VY
 
+
+
+
+
+
 8: OC8_IS_TYPE_LD_IMM <X, NN> (opcode: 6XNN)
 
 Operands:
@@ -145,6 +173,10 @@ Vx <- I
 
 Description:
 Load immediate 8bit val to register
+
+
+
+
 
 9: OC8_IS_TYPE_ADD_IMM <X, NN> (opcode: 7XNN)
 
@@ -161,6 +193,10 @@ VX <- VX + I
 Description:
 Add 8b immediate value I to register VX
 
+
+
+
+
 10: OC8_IS_TYPE_LD_REG <X, Y> (opcode: 8XY0)
 
 Operands:
@@ -175,6 +211,10 @@ VX <- VY
 
 Description:
 Load value of reg V<Y> into reg <X>
+
+
+
+
 
 11: OC8_IS_TYPE_OR <X, Y> (opcode: 8XY1)
 
@@ -191,6 +231,11 @@ VX <- VX | VY
 Description:
 Or V<X> with V<Y> and store back result in V<X>
 
+
+
+
+
+
 12: OC8_IS_TYPE_AND <X, Y> (opcode: 8XY2)
 
 Operands:
@@ -206,6 +251,12 @@ VX <- VX & VY
 Description:
 And V<X> with V<Y> and store back result in V<X>
 
+
+
+
+
+
+
 13: OC8_IS_TYPE_XOR <X, Y> (opcode: 8XY3)
 
 Operands:
@@ -220,6 +271,11 @@ VX <- VX ^ VY
 
 Description:
 Xor V<X> with V<Y> and store back result in V<X>
+
+
+
+
+
 
 14: OC8_IS_TYPE_ADD_REG <X, Y> (opcode: 8XY4)
 
@@ -237,6 +293,9 @@ VX <- VX + VY
 Description:
 Add V<Y> to V<X> and store back result in V<X>
 Set VF to 1 if there is carry, otherwhise to 0
+
+
+
 
 15: OC8_IS_TYPE_SUB <X, Y> (opcode: 8XY5)
 
@@ -256,7 +315,11 @@ Description:
 Substract V<Y> from V<Y> and store back result in V<X>
 Set VF to 0 if there is borrow, otherwhise to 1
 
-16: OC8_IS_TYPE_SHR <X, Y> (opcode: 8XY7)
+
+
+
+
+16: OC8_IS_TYPE_SHR <X, Y> (opcode: 8XY6)
 
 Operands:
 Reg X: <X>
@@ -276,6 +339,10 @@ Set VF to 1 is the least significant bit of V<Y> is set, otherwhise to 0
 
 @TODO Some inplems of shr ignore V<Y>, they load and store from V<X>. Which to do ?
 
+
+
+
+
 17: OC8_IS_TYPE_SUBN <X, Y> (opcode: 8XY7)
 
 Operands:
@@ -293,6 +360,12 @@ VX <- VY - VX
 Description:
 Substract V<X> from V<Y> and store back result in V<X>
 Set VF to 0 if there is borrow, otherwhise to 1
+
+
+
+
+
+
 
 18: OC8_IS_TYPE_SHL <X, Y> (opcode: 8XYE)
 
@@ -314,6 +387,11 @@ Set VF to 1 is the most significant bit of V<Y> is set, otherwhise to 0
 
 @TODO Some inplems of shl ignore V<Y>, they load and store from V<X>. Which to do ?
 
+
+
+
+
+
 19: OC8_IS_TYPE_SKIP_NE_REG <X, Y> (opcode: 9XY0)
 
 Operands:
@@ -332,6 +410,12 @@ if (VY != VX)
 Description:
 Skip next instruction if VY != VX
 
+
+
+
+
+
+
 20: OC8_IS_TYPE_ST_I <NNN> (opcode: ANNN)
 
 Operands:
@@ -346,6 +430,11 @@ I <- <Addr>
 Description:
 Set the address stored in I at <Addr>
 
+
+
+
+
+
 21: OC8_IS_TYPE_JMP_V0 <NNN> (opcode: BNNN)
 
 Operands:
@@ -359,6 +448,11 @@ pc <- <Addr> + <V0>
 
 Description:
 Jump to <ADDR> + V0
+
+
+
+
+
 
 22: OC8_IS_TYPE_RAND <X, NN> (opcode: CXNN)
 
@@ -375,6 +469,10 @@ V<X> <- Rand(0, 256) & <I>
 Description:
 Generate a number between 0 and 255 included, xor it with Immediate <I>, and store it to reg V<X>
 
+
+
+
+
 23: OC8_IS_TYPE_DRAW <X, Y, N> (opcode: DXYN)
 
 Operands:
@@ -389,12 +487,19 @@ Effects:
 See description
 
 Description:
-Load sprite of width 8 and height N, stored at addr of reg I. Each row is stored in one byte (1 cell per bit).
+Load sprite of width 8 and height N, stored at addr of reg I.
+Each row is stored in one byte (1 cell per bit).
 Sprite is drawn at location (V<X>, V<Y>).
 When drawing, every bit at 1 on the sprite is flipped on the screen.
 If any bit it flipped from 1 to 0, VF is set to 1, otherwhise to 0.
 If (x, y) out of screen bounds, apply modulo.
 If sprite goes off-screen, it's clipped.
+When drawing 1 byte, the msb correspond to the left-most pixel,
+and the lsb to the right-might pixel.
+
+
+
+
 
 24: OC8_IS_TYPE_SKIP_KP <X> (opcode: EX9E)
 
@@ -411,6 +516,10 @@ if (key_pressed(V<X>))
 Description:
 Skip the next instruction if the key stored in V<X> is pessed
 
+
+
+
+
 25: OC8_IS_TYPE_SKIP_KNP <X> (opcode: EXA1)
 
 Operands:
@@ -426,6 +535,11 @@ if (!key_pressed(V<X>))
 Description:
 Skip the next instruction if the key stored in V<X> is not pessed
 
+
+
+
+
+
 26: OC8_IS_TYPE_LD_DT <X> (opcode: FX07)
 
 Operands:
@@ -439,6 +553,11 @@ V<X> <- DelayTimer
 
 Description:
 Set V<X> to the value of the Delay Timer.
+
+
+
+
+
 
 27: OC8_IS_TYPE_LD_K <X> (opcode: FX0A)
 
@@ -454,6 +573,13 @@ V<X> <- wait_key()
 Description:
 Block the program until a key is pressed
 Set V<X> to the value of the pressed key
+Ref doesn't tell what happens if multiple keys are pressed.
+I return the one with the lowest index.
+
+
+
+
+
 
 28: OC8_IS_TYPE_ST_DT <X> (opcode: FX15)
 
@@ -469,6 +595,10 @@ DelayTimer <- V<X>
 Description:
 Set the Delay Timer to V<X>
 
+
+
+
+
 29: OC8_IS_TYPE_ST_ST <X> (opcode: FX18)
 
 Operands:
@@ -482,6 +612,11 @@ SountTimer <- V<X>
 
 Description:
 Set the Sound Timer to V<X>
+
+
+
+
+
 
 30: OC8_IS_TYPE_ADD_I <X> (opcode: FX1E)
 
@@ -497,7 +632,14 @@ I <- I + V<X>
 
 Description:
 Add V<X> to I.
+Undocument feature, according to Wikipedia Page:
 If the calculation overflows the valid range (0xFFF), VF is set to 1, otherwhise to 0.
+@TODO: I didn't implement VF edit, should I ?
+
+
+
+
+
 
 31: OC8_IS_TYPE_LD_F <X> (opcode: FX29)
 
@@ -508,13 +650,19 @@ Assembly Syntax:
 ldhs V<X>
 
 Effects:
-I <- get_sprite_addr_of_hex_digit(V<X>)
+I <- get_sprite_addr_of_hex_digit(V<X> & 0xF)
 
 Description:
 Sets I to the location of the sprite for hexa digit char in V<X>, in 4*5 font.
 This font is loaded to memory at initialization, and stored at addr below 0x512
 Binary code for the font can be found at:
 https://github.com/mattmikolay/chip-8/wiki/CHIP%E2%80%908-Technical-Reference#fonts
+V<X> in range 0-255, I & oxF to get hexa digit
+
+
+
+
+
 
 32: OC8_IS_TYPE_LD_B <X> (opcode: FX33)
 
@@ -528,8 +676,13 @@ Effects:
 I[0:2] <- bcd(V<X>)
 
 Description:
-Compute BCD representation of V<X>, store hundreds digit at I[0], tens digit at I[1],
+Compute BCD representation of V<X>: store hundreds digit at I[0], tens digit at I[1],
 and units at I[2]
+
+
+
+
+
 
 33: OC8_IS_TYPE_ST_REGS <X> (opcode: FX55)
 
@@ -546,8 +699,15 @@ I <- I + <X> + 1
 Description:
 Store registers V0 to V<X> in order at adresses starting at I.
 Then increment I by <X> + 1
+In some versions, I not increemented.
+@TODO Should I really increment it ?
 
-33: OC8_IS_TYPE_LD_REGS <X> (opcode: FX65)
+
+
+
+
+
+34: OC8_IS_TYPE_LD_REGS <X> (opcode: FX65)
 
 Operands:
 Reg X: <X>
@@ -562,3 +722,5 @@ I <- I + <X> + 1
 Description:
 Load registers V0 to V<X> in order from data at adresses starting at I.
 Then increment I by <X> + 1
+In some versions, I not increemented
+@TODO Should I really increment it ?
