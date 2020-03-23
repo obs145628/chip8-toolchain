@@ -1,0 +1,39 @@
+
+The CHIP-8 has many kinds of registers:
+
+#### General Purpose Data Registers ###
+
+16 1 byte data registers (V0 to VF)
+Many ins manipulate them using a 4bits index to indicate which VX to use
+
+VF also used as flag reg for some ins.
+
+### Program Counter ###
+
+PC: 2 bytes, but only 12bits necessary
+Contains the address of the next instruction to be executed.
+
+### Address Register ###
+
+I: 2 bytes, but only 12 bits necessary.
+Contains some memory address (cannot be stored in VX).
+A few instructions manipulates it to read/write data to address in I.
+
+### Stack Pointer ###
+
+SP: variable size. (1 byte in implem)
+Used to point to the top of the stack (more infos at stack.txt)
+Incremented / Decrement by call / ret instructions.
+
+### Delay Timer ###
+
+DT: 1 byte, decremented at 60 hertz, until it reaches 0
+
+### Sound Timer ###
+
+ST: 1 byte, decremented at 60 hertz, until reaches 0
+Audio system produces a beep when ST != 0
+
+
+
+All registers are intialized ty 0, expect PC which is usually set at 0x200 (begin of the ROM)

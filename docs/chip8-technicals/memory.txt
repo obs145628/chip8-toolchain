@@ -1,0 +1,12 @@
+
+
+4K memory (2^12=4096) bytes.
+
+First 512 bytes are used by the interpreter, and are usually not referenced by CHIP-8 Programs (but can be)
+It must contains:
+- the 4*5 fonts for 0 to F (more infos at instructions.txt: FX29): takes 80 bytes (5 * 16)
+
+Loading a CHIP-8 ROM is done by loading the whole file at address 512 (0X200).
+The program start executing by setting the PC at 0x200.
+
+Except fort the 512 first bytes and thE ROM, and other bytes are 0-intiialized.

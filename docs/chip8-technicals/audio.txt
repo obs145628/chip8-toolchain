@@ -1,0 +1,6 @@
+Really simple sound system: Produce a beep when Sound Timer is != 0.
+More infos in registers.txt
+
+
+352 last bytes reserved for variables and display refresh ?
+I Ignore this recommandation and use the full RAM to 4096.

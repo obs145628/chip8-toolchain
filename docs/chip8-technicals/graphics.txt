@@ -1,0 +1,11 @@
+#################
+### Graphics. ###
+#################
+
+The screen is of size 64 * 32 pixels.
+It's monochrome (0 = black, 1 = white)
+Default is all 0s.
+Top-left coordinate system.
+
+Only one instruction: draw to a sprite to screen.
+More infos in instructions.txt: Draw (DXYN)

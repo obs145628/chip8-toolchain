@@ -9,6 +9,7 @@ Some parts written in other languages (C++ / Rust), but because they are extern 
 - Write a linker: takes many `.c8o` files and create `.c8elf` file
   Similar idea than elf file for GBA devkitARM: binary, containing all debug and symbol infos
   Use my own elf format
+- Write objdump: Read `.c8o` and `.c8elf`, and display print all code with symbold
 - Write a rombuilder: take a `.c8elf`, strip all debug/symbol infos to generate a valid CHIP-8 ROM.
 - Write an emulator: load CHIP-8 ROMS, or `.c8elf` file, and execute it.
   Mode CLI (simply run it, no display/sound, can have debug infos)

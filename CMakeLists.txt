@@ -19,3 +19,4 @@ add_subdirectory(tests)
 add_subdirectory(src/apps/oc8-emu)
 
 add_subdirectory(src/oc8_is)
+add_subdirectory(src/oc8_emu)

@@ -393,6 +393,8 @@ Load sprite of width 8 and height N, stored at addr of reg I. Each row is stored
 Sprite is drawn at location (V<X>, V<Y>).
 When drawing, every bit at 1 on the sprite is flipped on the screen.
 If any bit it flipped from 1 to 0, VF is set to 1, otherwhise to 0.
+If (x, y) out of screen bounds, apply modulo.
+If sprite goes off-screen, it's clipped.
 
 24: OC8_IS_TYPE_SKIP_KP <X> (opcode: EX9E)
 
@@ -510,6 +512,9 @@ I <- get_sprite_addr_of_hex_digit(V<X>)
 
 Description:
 Sets I to the location of the sprite for hexa digit char in V<X>, in 4*5 font.
+This font is loaded to memory at initialization, and stored at addr below 0x512
+Binary code for the font can be found at:
+https://github.com/mattmikolay/chip-8/wiki/CHIP%E2%80%908-Technical-Reference#fonts
 
 32: OC8_IS_TYPE_LD_B <X> (opcode: FX33)
 

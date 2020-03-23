@@ -19,6 +19,8 @@
 extern "C" {
 #endif
 
+// The 35 types of instructions
+// Described by the docs
 typedef enum {
   OC8_IS_TYPE_SYS,         // 0NNN
   OC8_IS_TYPE_CLS,         // 00E0
@@ -57,6 +59,8 @@ typedef enum {
   OC8_IS_TYPE_LD_REGS,     // FX65
 } oc8_is_type_t;
 
+/// Represent an instruction
+/// Used to decode from / encode to opcode
 typedef struct {
   // ins opcode, optional, 0 if not defined
   // set to 0 when filling other fields manually, then call encode_ins that

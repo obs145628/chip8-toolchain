@@ -1,0 +1,12 @@
+#############
+### Input ###
+#############
+
+Keypay with 16 keys: 0 to F
+Usually 8, 4, 6, 2 used for directional input.
+Each key can be in one of 2 states: pressed or released.
+
+They are used through 3 instructions, that behave differently if a key is pressed or not.
+(More infos in instructions.txt)
+
+For the emulator, these keys correspond to the keyboard: 1 to 8, then q to i.
