@@ -36,6 +36,6 @@ Audio system produces a beep when ST != 0
 
 
 
-All registers are intialized ty 0, expect PC which is usually set at 0x200 (begin of the ROM)
+All registers are intialized ty 0, except PC which is usually set at 0x200 (begin of the ROM)
 
 Timers decremented at 60 hertz. decremented by one every 1/60th second

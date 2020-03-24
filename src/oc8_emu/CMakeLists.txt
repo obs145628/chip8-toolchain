@@ -12,6 +12,7 @@ target_link_libraries(oc8_emu oc8_is)
 set(TEST_SRC
   test_main.cc
   test_ins.cc
+  test_timer.cc
 )
 set(TEST_NAME utest_oc8emu.bin)
 add_executable(${TEST_NAME} ${TEST_SRC})

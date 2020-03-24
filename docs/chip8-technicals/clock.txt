@@ -1,0 +1,5 @@
+
+There is little details about the clock speed.
+It depends of the game.
+My implementation run at 500Hz.
+Can be changed at runtime using a variable in CPU struct.
