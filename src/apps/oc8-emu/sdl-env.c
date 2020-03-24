@@ -2,6 +2,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 sdl_env_t g_sdl_env;
 
@@ -31,6 +32,8 @@ void sdl_env_init(const char *win_title, int win_width, int win_height) {
   g_sdl_env.sdl_win_rect.y = 0;
   g_sdl_env.sdl_win_rect.w = win_width;
   g_sdl_env.sdl_win_rect.h = win_height;
+
+  memset(g_sdl_env.keys_states, 0, sizeof(g_sdl_env.keys_states));
 }
 
 void sdl_env_exit() {
@@ -47,6 +50,18 @@ int sdl_env_update() {
   while (SDL_PollEvent(&e) != 0) {
     if (e.type == SDL_QUIT)
       quit = 1;
+
+    else if (e.type == SDL_KEYDOWN) {
+      size_t key = e.key.keysym.sym;
+      if (key < SDL_ENV_MAX_KEYS)
+        g_sdl_env.keys_states[key] = 1;
+    }
+
+    else if (e.type == SDL_KEYUP) {
+      size_t key = e.key.keysym.sym;
+      if (key < SDL_ENV_MAX_KEYS)
+        g_sdl_env.keys_states[key] = 0;
+    }
   }
 
   sdl_env_render();

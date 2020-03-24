@@ -10,6 +10,11 @@
 
 uint8_t *img_buf;
 
+static const size_t keypad_map[OC8_EMU_NB_KEYS] = {
+    SDLK_1, SDLK_2, SDLK_3, SDLK_4, SDLK_5, SDLK_6, SDLK_7, SDLK_8,
+    SDLK_q, SDLK_w, SDLK_e, SDLK_r, SDLK_t, SDLK_y, SDLK_u, SDLK_i,
+};
+
 static void load_image() {
   for (int y = 0; y < OC8_EMU_SCREEN_HEIGHT; ++y) {
     for (int x = 0; x < OC8_EMU_SCREEN_WIDTH; ++x) {
@@ -46,6 +51,10 @@ int main(int argc, char **argv) {
     // Run GUI loop
     if (sdl_env_update() != 0)
       break;
+
+    // Update key states
+    for (int i = 0; i < OC8_EMU_NB_KEYS; ++i)
+      g_oc8_emu_keypad[i] = sdl_env_keystate(keypad_map[i]) != 0;
   }
 
   sdl_env_exit();

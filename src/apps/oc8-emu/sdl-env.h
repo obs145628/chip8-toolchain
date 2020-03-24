@@ -20,6 +20,8 @@
 extern "C" {
 #endif
 
+#define SDL_ENV_MAX_KEYS (1024)
+
 /// Main struct, that controls every part of the SDL API
 /// Makes sure things are init and released properly
 typedef struct {
@@ -30,6 +32,8 @@ typedef struct {
   const uint8_t *img_buf;
   size_t img_width;
   size_t img_height;
+
+  uint8_t keys_states[SDL_ENV_MAX_KEYS];
 } sdl_env_t;
 
 extern sdl_env_t g_sdl_env;
@@ -52,6 +56,11 @@ void sdl_env_render();
 /// It means `pixs_buf` must remain valid until this function is called again
 /// with a new one
 void sdl_env_set_image(const uint8_t *pixs_buf, size_t width, size_t height);
+
+/// Returns != 0 if key is pressed
+static inline int sdl_env_keystate(size_t key) {
+  return (int)g_sdl_env.keys_states[key];
+}
 
 #ifdef __cplusplus
 }
