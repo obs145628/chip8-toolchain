@@ -15,6 +15,8 @@
 
 #include <stdint.h>
 
+#include "oc8_is/ins.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -46,8 +48,27 @@ typedef struct {
   // Otherwhise set to 0
   int block_waitq;
 
+  // Set to 1 if last instruction changed screen, 0 otherwhise
+  int screen_changed;
+
   // Used by CXNN to generate random numbers
   unsigned long rg_seed;
+
+  // Last time in us Delay and Sound Timers were updated
+  uint64_t timer_last_update;
+
+  // Last time in us the last cycle was executed
+  uint64_t last_cycle_time;
+
+  // CPU frequency in Hertz (nb cycles per second)
+  unsigned cpu_speed;
+
+  // Total number of executed instructions
+  // Also count when not executing FX0A (wait for a keypress)
+  unsigned counter_ins;
+
+  // Last instruction fetched
+  oc8_is_ins_t curr_ins;
 
 } oc8_emu_cpu_t;
 
@@ -62,17 +83,18 @@ void oc8_emu_init_cpu();
 /// Initialize all required parts of the CHIP-8: CPU, mem, video output, etc
 void oc8_emu_init();
 
-/// Only run one instruction
+/// Run one instruction, ignoring the clock speed
 /// Abort if the opcode is invalid
+/// If the instruction to be run is FX0A (wait for a keypress), and none is
+/// available, the instruction isn't executed and `block_waitq` is set to 1.
+/// This is to allow a monothread program to load update the keypad sate before
+/// calling `oc8_emu_cpu_step()` again
 void oc8_emu_cpu_step();
 
-/// Run Many instructions until an event pause the process
-/// One of these events could be:
-/// - Many ticks occured since begin (need to refresh GUI and other for
-/// monothread programs)
-/// - waitk instruction runned, and no key available yet
-/// Abort if one instruction failed (invalid opcode)
-void uc8_emu_cpu_loop();
+/// Run one cycle
+/// Runs only one instruction, but will sleep a few milliseconds before if
+/// needed, to makes sure the CPU runs at the wanted clock speed
+void oc8_emu_cpu_cycle();
 
 #ifdef __cplusplus
 }

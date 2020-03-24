@@ -1,5 +1,6 @@
 set(SRC
   cpu.c
+  exec_ins.c
   input.c
   mem.c
   screen.c

@@ -48,7 +48,7 @@ static inline void oc8_emu_screen_set_pix(unsigned x, unsigned y, int v) {
   if (v)
     val |= mask;
   else
-    val ^= ~mask;
+    val &= ~mask;
 
   g_oc8_emu_screen[idx] = val & 0xFF;
 }

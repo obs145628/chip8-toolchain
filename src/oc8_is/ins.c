@@ -19,6 +19,7 @@
 /// @returns != 0 if failed to decode instruction
 int oc8_is_decode_ins(oc8_is_ins_t *ins, const char *buf) {
   uint16_t opcode = *((uint16_t *)buf);
+  ins->opcode = opcode;
 
   // instructions opcodes stored in big endian, must be swapped for LE systems.
   // @TODO add conditions to not swap for BE systems

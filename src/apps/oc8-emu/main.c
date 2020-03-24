@@ -1,20 +1,27 @@
+#define _POSIX_C_SOURCE 200809L
+
 #include <assert.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "oc8_is/ins.h"
+#include "oc8_emu/oc8_emu.h"
+#include "sdl-env.h"
 
-static uint8_t *read_bytes(const char *path) {
-  FILE *is;
-  assert((is = fopen(path, "rb")) != NULL);
-  assert(fseek(is, 0, SEEK_END) == 0);
-  unsigned long size = ftell(is);
-  assert(fseek(is, 0, SEEK_SET) == 0);
-  uint8_t *buf = (uint8_t *)malloc(size);
-  assert(fread(buf, 1, size, is) == size);
-  fclose(is);
-  return buf;
+uint8_t *img_buf;
+
+static void load_image() {
+  for (int y = 0; y < OC8_EMU_SCREEN_HEIGHT; ++y) {
+    for (int x = 0; x < OC8_EMU_SCREEN_WIDTH; ++x) {
+
+      uint8_t val = oc8_emu_screen_get_pix(x, y) ? 0xFF : 0;
+      img_buf[3 * OC8_EMU_SCREEN_WIDTH * y + 3 * x + 0] = val;
+      img_buf[3 * OC8_EMU_SCREEN_WIDTH * y + 3 * x + 1] = val;
+      img_buf[3 * OC8_EMU_SCREEN_WIDTH * y + 3 * x + 2] = val;
+    }
+  }
+
+  sdl_env_render();
 }
 
 int main(int argc, char **argv) {
@@ -23,20 +30,25 @@ int main(int argc, char **argv) {
     return 1;
   }
 
-  uint8_t *data = read_bytes(argv[1]);
+  oc8_emu_init();
+  oc8_emu_load_rom_file(argv[1]);
+  sdl_env_init("oc8-emu", 640, 320);
+  img_buf = (uint8_t *)malloc(OC8_EMU_SCREEN_HEIGHT * OC8_EMU_SCREEN_WIDTH * 3);
+  sdl_env_set_image(img_buf, OC8_EMU_SCREEN_WIDTH, OC8_EMU_SCREEN_HEIGHT);
+  load_image();
 
-  uint16_t b0 = *((uint16_t *)data);
-  uint8_t *p8 = (uint8_t *)&b0;
+  for (;;) {
+    // Run one cycle
+    oc8_emu_cpu_cycle();
+    if (g_oc8_emu_cpu.screen_changed)
+      load_image();
 
-  printf("val data: %x%x\n", (unsigned)data[0], (unsigned)data[1]);
-  printf("val b0: %x\n", (unsigned)b0);
-  printf("val p8: %x%x\n", (unsigned)p8[0], (unsigned)p8[1]);
-  printf("val b0 0|1: %x%x\n", (unsigned)((b0 >> 8) & 0xFF),
-         (unsigned)(b0 & 0xFF));
+    // Run GUI loop
+    if (sdl_env_update() != 0)
+      break;
+  }
 
-  oc8_is_ins_t ins;
-  oc8_is_decode_ins(&ins, (const char *)data);
-
-  free(data);
+  sdl_env_exit();
+  free(img_buf);
   return 0;
 }
