@@ -27,149 +27,149 @@ int oc8_is_decode_ins(oc8_is_ins_t *ins, const char *buf) {
 
   // opcodes starting by 0
   if (opcode == 0x00E0) {
-    ins->type = OC8_IS_TYPE_CLS;
+    ins->type = OC8_IS_TYPE_00E0;
   }
 
   else if (opcode == 0x00EE) {
-    ins->type = OC8_IS_TYPE_RET;
+    ins->type = OC8_IS_TYPE_00EE;
   }
 
   else if (OPCODE_H0(opcode) == 0x0) {
-    ins->type = OC8_IS_TYPE_SYS;
+    ins->type = OC8_IS_TYPE_0NNN;
     ins->operands[0] = OPCODE_H123(opcode);
   }
 
   // opcodes starting by 1
   else if (OPCODE_H0(opcode) == 1) {
-    ins->type = OC8_IS_TYPE_JMP;
+    ins->type = OC8_IS_TYPE_1NNN;
     ins->operands[0] = OPCODE_H123(opcode);
   }
 
   // opcodes starting by 2
   else if (OPCODE_H0(opcode) == 2) {
-    ins->type = OC8_IS_TYPE_CALL;
+    ins->type = OC8_IS_TYPE_2NNN;
     ins->operands[0] = OPCODE_H123(opcode);
   }
 
   // opcodes starting by 3
   else if (OPCODE_H0(opcode) == 3) {
-    ins->type = OC8_IS_TYPE_SKIP_E_IMM;
+    ins->type = OC8_IS_TYPE_3XNN;
     ins->operands[0] = OPCODE_H1(opcode);
     ins->operands[1] = OPCODE_H23(opcode);
   }
 
   // opcodes starting by 4
   else if (OPCODE_H0(opcode) == 4) {
-    ins->type = OC8_IS_TYPE_SKIP_NE_IMM;
+    ins->type = OC8_IS_TYPE_4XNN;
     ins->operands[0] = OPCODE_H1(opcode);
     ins->operands[1] = OPCODE_H23(opcode);
   }
 
   // opcodes starting by 5
   else if (OPCODE_H0(opcode) == 5 && OPCODE_H3(opcode) == 0) {
-    ins->type = OC8_IS_TYPE_SKIP_E_REG;
+    ins->type = OC8_IS_TYPE_5XY0;
     ins->operands[0] = OPCODE_H1(opcode);
     ins->operands[1] = OPCODE_H2(opcode);
   }
 
   // opcodes starting by 6
   else if (OPCODE_H0(opcode) == 6) {
-    ins->type = OC8_IS_TYPE_LD_IMM;
+    ins->type = OC8_IS_TYPE_6XNN;
     ins->operands[0] = OPCODE_H1(opcode);
     ins->operands[1] = OPCODE_H23(opcode);
   }
 
   // opcodes starting by 7
   else if (OPCODE_H0(opcode) == 7) {
-    ins->type = OC8_IS_TYPE_ADD_IMM;
+    ins->type = OC8_IS_TYPE_7XNN;
     ins->operands[0] = OPCODE_H1(opcode);
     ins->operands[1] = OPCODE_H23(opcode);
   }
 
   // opcodes starting by 8
   else if (OPCODE_H0(opcode) == 0x8 && OPCODE_H3(opcode) == 0x0) {
-    ins->type = OC8_IS_TYPE_LD_REG;
+    ins->type = OC8_IS_TYPE_8XY0;
     ins->operands[0] = OPCODE_H1(opcode);
     ins->operands[1] = OPCODE_H2(opcode);
   }
 
   else if (OPCODE_H0(opcode) == 0x8 && OPCODE_H3(opcode) == 0x1) {
-    ins->type = OC8_IS_TYPE_OR;
+    ins->type = OC8_IS_TYPE_8XY1;
     ins->operands[0] = OPCODE_H1(opcode);
     ins->operands[1] = OPCODE_H2(opcode);
   }
 
   else if (OPCODE_H0(opcode) == 0x8 && OPCODE_H3(opcode) == 0x2) {
-    ins->type = OC8_IS_TYPE_AND;
+    ins->type = OC8_IS_TYPE_8XY2;
     ins->operands[0] = OPCODE_H1(opcode);
     ins->operands[1] = OPCODE_H2(opcode);
   }
 
   else if (OPCODE_H0(opcode) == 0x8 && OPCODE_H3(opcode) == 0x3) {
-    ins->type = OC8_IS_TYPE_XOR;
+    ins->type = OC8_IS_TYPE_8XY3;
     ins->operands[0] = OPCODE_H1(opcode);
     ins->operands[1] = OPCODE_H2(opcode);
   }
 
   else if (OPCODE_H0(opcode) == 0x8 && OPCODE_H3(opcode) == 0x4) {
-    ins->type = OC8_IS_TYPE_ADD_REG;
+    ins->type = OC8_IS_TYPE_8XY4;
     ins->operands[0] = OPCODE_H1(opcode);
     ins->operands[1] = OPCODE_H2(opcode);
   }
 
   else if (OPCODE_H0(opcode) == 0x8 && OPCODE_H3(opcode) == 0x5) {
-    ins->type = OC8_IS_TYPE_SUB;
+    ins->type = OC8_IS_TYPE_8XY5;
     ins->operands[0] = OPCODE_H1(opcode);
     ins->operands[1] = OPCODE_H2(opcode);
   }
 
   else if (OPCODE_H0(opcode) == 0x8 && OPCODE_H3(opcode) == 0x6) {
-    ins->type = OC8_IS_TYPE_SHR;
+    ins->type = OC8_IS_TYPE_8XY6;
     ins->operands[0] = OPCODE_H1(opcode);
     ins->operands[1] = OPCODE_H2(opcode);
   }
 
   else if (OPCODE_H0(opcode) == 0x8 && OPCODE_H3(opcode) == 0x7) {
-    ins->type = OC8_IS_TYPE_SUBN;
+    ins->type = OC8_IS_TYPE_8XY7;
     ins->operands[0] = OPCODE_H1(opcode);
     ins->operands[1] = OPCODE_H2(opcode);
   }
 
   else if (OPCODE_H0(opcode) == 0x8 && OPCODE_H3(opcode) == 0xE) {
-    ins->type = OC8_IS_TYPE_SHL;
+    ins->type = OC8_IS_TYPE_8XYE;
     ins->operands[0] = OPCODE_H1(opcode);
     ins->operands[1] = OPCODE_H2(opcode);
   }
 
   // opdocdes starting by 9
   else if (OPCODE_H0(opcode) == 0x9 && OPCODE_H3(opcode) == 0x0) {
-    ins->type = OC8_IS_TYPE_SKIP_NE_REG;
+    ins->type = OC8_IS_TYPE_9XY0;
     ins->operands[0] = OPCODE_H1(opcode);
     ins->operands[1] = OPCODE_H2(opcode);
   }
 
   // opcodes starting by A
   else if (OPCODE_H0(opcode) == 0xA) {
-    ins->type = OC8_IS_TYPE_ST_I;
+    ins->type = OC8_IS_TYPE_ANNN;
     ins->operands[0] = OPCODE_H123(opcode);
   }
 
   // opcodes starting by B
   else if (OPCODE_H0(opcode) == 0xB) {
-    ins->type = OC8_IS_TYPE_JMP_V0;
+    ins->type = OC8_IS_TYPE_BNNN;
     ins->operands[0] = OPCODE_H123(opcode);
   }
 
   // opcodes starting by C
   else if (OPCODE_H0(opcode) == 0xC) {
-    ins->type = OC8_IS_TYPE_RAND;
+    ins->type = OC8_IS_TYPE_CXNN;
     ins->operands[0] = OPCODE_H1(opcode);
     ins->operands[1] = OPCODE_H23(opcode);
   }
 
   // opcodes starting by D
   else if (OPCODE_H0(opcode) == 0xD) {
-    ins->type = OC8_IS_TYPE_DRAW;
+    ins->type = OC8_IS_TYPE_DXYN;
     ins->operands[0] = OPCODE_H1(opcode);
     ins->operands[1] = OPCODE_H2(opcode);
     ins->operands[2] = OPCODE_H3(opcode);
@@ -177,58 +177,58 @@ int oc8_is_decode_ins(oc8_is_ins_t *ins, const char *buf) {
 
   // opcodes starting by E
   else if (OPCODE_H0(opcode) == 0xE && OPCODE_H23(opcode) == 0x9E) {
-    ins->type = OC8_IS_TYPE_SKIP_KP;
+    ins->type = OC8_IS_TYPE_EX9E;
     ins->operands[0] = OPCODE_H1(opcode);
   }
 
   else if (OPCODE_H0(opcode) == 0xE && OPCODE_H23(opcode) == 0xA1) {
-    ins->type = OC8_IS_TYPE_SKIP_KNP;
+    ins->type = OC8_IS_TYPE_EXA1;
     ins->operands[0] = OPCODE_H1(opcode);
   }
 
   // opcodes starting by F
   else if (OPCODE_H0(opcode) == 0xF && OPCODE_H23(opcode) == 0x07) {
-    ins->type = OC8_IS_TYPE_LD_DT;
+    ins->type = OC8_IS_TYPE_FX07;
     ins->operands[0] = OPCODE_H1(opcode);
   }
 
   else if (OPCODE_H0(opcode) == 0xF && OPCODE_H23(opcode) == 0x0A) {
-    ins->type = OC8_IS_TYPE_LD_K;
+    ins->type = OC8_IS_TYPE_FX0A;
     ins->operands[0] = OPCODE_H1(opcode);
   }
 
   else if (OPCODE_H0(opcode) == 0xF && OPCODE_H23(opcode) == 0x15) {
-    ins->type = OC8_IS_TYPE_ST_DT;
+    ins->type = OC8_IS_TYPE_FX15;
     ins->operands[0] = OPCODE_H1(opcode);
   }
 
   else if (OPCODE_H0(opcode) == 0xF && OPCODE_H23(opcode) == 0x18) {
-    ins->type = OC8_IS_TYPE_ST_ST;
+    ins->type = OC8_IS_TYPE_FX18;
     ins->operands[0] = OPCODE_H1(opcode);
   }
 
   else if (OPCODE_H0(opcode) == 0xF && OPCODE_H23(opcode) == 0x1E) {
-    ins->type = OC8_IS_TYPE_ADD_I;
+    ins->type = OC8_IS_TYPE_FX1E;
     ins->operands[0] = OPCODE_H1(opcode);
   }
 
   else if (OPCODE_H0(opcode) == 0xF && OPCODE_H23(opcode) == 0x29) {
-    ins->type = OC8_IS_TYPE_LD_F;
+    ins->type = OC8_IS_TYPE_FX29;
     ins->operands[0] = OPCODE_H1(opcode);
   }
 
   else if (OPCODE_H0(opcode) == 0xF && OPCODE_H23(opcode) == 0x33) {
-    ins->type = OC8_IS_TYPE_LD_B;
+    ins->type = OC8_IS_TYPE_FX33;
     ins->operands[0] = OPCODE_H1(opcode);
   }
 
   else if (OPCODE_H0(opcode) == 0xF && OPCODE_H23(opcode) == 0x55) {
-    ins->type = OC8_IS_TYPE_ST_REGS;
+    ins->type = OC8_IS_TYPE_FX55;
     ins->operands[0] = OPCODE_H1(opcode);
   }
 
   else if (OPCODE_H0(opcode) == 0xF && OPCODE_H23(opcode) == 0x65) {
-    ins->type = OC8_IS_TYPE_LD_REGS;
+    ins->type = OC8_IS_TYPE_FX65;
     ins->operands[0] = OPCODE_H1(opcode);
   }
 

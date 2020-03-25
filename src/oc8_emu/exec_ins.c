@@ -341,109 +341,109 @@ static void exec_ins_FX65() {
 
 void oc8_emu_exec_ins() {
   switch (g_oc8_emu_cpu.curr_ins.type) {
-  case OC8_IS_TYPE_SYS:
+  case OC8_IS_TYPE_0NNN:
     exec_ins_0NNN();
     break;
-  case OC8_IS_TYPE_CLS:
+  case OC8_IS_TYPE_00E0:
     exec_ins_00E0();
     break;
-  case OC8_IS_TYPE_RET:
+  case OC8_IS_TYPE_00EE:
     exec_ins_00EE();
     break;
-  case OC8_IS_TYPE_JMP:
+  case OC8_IS_TYPE_1NNN:
     exec_ins_1NNN();
     break;
-  case OC8_IS_TYPE_CALL:
+  case OC8_IS_TYPE_2NNN:
     exec_ins_2NNN();
     break;
-  case OC8_IS_TYPE_SKIP_E_IMM:
+  case OC8_IS_TYPE_3XNN:
     exec_ins_3XNN();
     break;
-  case OC8_IS_TYPE_SKIP_NE_IMM:
+  case OC8_IS_TYPE_4XNN:
     exec_ins_4XNN();
     break;
-  case OC8_IS_TYPE_SKIP_E_REG:
+  case OC8_IS_TYPE_5XY0:
     exec_ins_5XY0();
     break;
-  case OC8_IS_TYPE_LD_IMM:
+  case OC8_IS_TYPE_6XNN:
     exec_ins_6XNN();
     break;
-  case OC8_IS_TYPE_ADD_IMM:
+  case OC8_IS_TYPE_7XNN:
     exec_ins_7XNN();
     break;
-  case OC8_IS_TYPE_LD_REG:
+  case OC8_IS_TYPE_8XY0:
     exec_ins_8XY0();
     break;
-  case OC8_IS_TYPE_OR:
+  case OC8_IS_TYPE_8XY1:
     exec_ins_8XY1();
     break;
-  case OC8_IS_TYPE_AND:
+  case OC8_IS_TYPE_8XY2:
     exec_ins_8XY2();
     break;
-  case OC8_IS_TYPE_XOR:
+  case OC8_IS_TYPE_8XY3:
     exec_ins_8XY3();
     break;
-  case OC8_IS_TYPE_ADD_REG:
+  case OC8_IS_TYPE_8XY4:
     exec_ins_8XY4();
     break;
-  case OC8_IS_TYPE_SUB:
+  case OC8_IS_TYPE_8XY5:
     exec_ins_8XY5();
     break;
-  case OC8_IS_TYPE_SHR:
+  case OC8_IS_TYPE_8XY6:
     exec_ins_8XY6();
     break;
-  case OC8_IS_TYPE_SUBN:
+  case OC8_IS_TYPE_8XY7:
     exec_ins_8XY7();
     break;
-  case OC8_IS_TYPE_SHL:
+  case OC8_IS_TYPE_8XYE:
     exec_ins_8XYE();
     break;
-  case OC8_IS_TYPE_SKIP_NE_REG:
+  case OC8_IS_TYPE_9XY0:
     exec_ins_9XY0();
     break;
-  case OC8_IS_TYPE_ST_I:
+  case OC8_IS_TYPE_ANNN:
     exec_ins_ANNN();
     break;
-  case OC8_IS_TYPE_JMP_V0:
+  case OC8_IS_TYPE_BNNN:
     exec_ins_BNNN();
     break;
-  case OC8_IS_TYPE_RAND:
+  case OC8_IS_TYPE_CXNN:
     exec_ins_CXNN();
     break;
-  case OC8_IS_TYPE_DRAW:
+  case OC8_IS_TYPE_DXYN:
     exec_ins_DXYN();
     break;
-  case OC8_IS_TYPE_SKIP_KP:
+  case OC8_IS_TYPE_EX9E:
     exec_ins_EX9E();
     break;
-  case OC8_IS_TYPE_SKIP_KNP:
+  case OC8_IS_TYPE_EXA1:
     exec_ins_EXA1();
     break;
-  case OC8_IS_TYPE_LD_DT:
+  case OC8_IS_TYPE_FX07:
     exec_ins_FX07();
     break;
-  case OC8_IS_TYPE_LD_K:
+  case OC8_IS_TYPE_FX0A:
     exec_ins_FX0A();
     break;
-  case OC8_IS_TYPE_ST_DT:
+  case OC8_IS_TYPE_FX15:
     exec_ins_FX15();
     break;
-  case OC8_IS_TYPE_ST_ST:
+  case OC8_IS_TYPE_FX18:
     exec_ins_FX18();
     break;
-  case OC8_IS_TYPE_ADD_I:
+  case OC8_IS_TYPE_FX1E:
     exec_ins_FX1E();
     break;
-  case OC8_IS_TYPE_LD_F:
+  case OC8_IS_TYPE_FX29:
     exec_ins_FX29();
     break;
-  case OC8_IS_TYPE_LD_B:
+  case OC8_IS_TYPE_FX33:
     exec_ins_FX33();
     break;
-  case OC8_IS_TYPE_ST_REGS:
+  case OC8_IS_TYPE_FX55:
     exec_ins_FX55();
     break;
-  case OC8_IS_TYPE_LD_REGS:
+  case OC8_IS_TYPE_FX65:
     exec_ins_FX65();
     break;
 

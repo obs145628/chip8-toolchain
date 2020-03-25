@@ -16,7 +16,7 @@ Some instructions set the Flag registers VF. It is set only if precised
 
 They are 35 different instructions:
 
-0: OC8_IS_TYPE_SYS <NNN> (opcode: 0NNN)
+0: 0NNN <NNN>
 
 Operands:
 Addr: <NNN>
@@ -30,7 +30,12 @@ Program aborts
 Description:
 Call native program at address <Addr>. Not implemented.
 
-1: OC8_IS_TYPE_CLS (opcode: 00E0)
+
+
+
+
+
+1: 00E0
 
 
 Assembly Syntax:
@@ -45,7 +50,7 @@ Clear the whole screen
 
 
 
-2: OC8_IS_TYPE_RET (opcode: 00E0)
+2: 00EE
 
 Assembly Syntax:
 ret
@@ -60,7 +65,7 @@ Returns from the current subsoutine
 
 
 
-3: OC8_IS_TYPE_JMP <NNN> (opcode: 1NNN)
+3: 1NNN <NNN>
 
 Operands:
 Addr: <NNN>
@@ -78,7 +83,7 @@ Jump to address <Addr>
 
 
 
-4: OC8_IS_TYPE_CALL <NNN> (opcode: 2NNN)
+4: 2NNN <NNN>
 
 Operands:
 Addr: <NNN>
@@ -97,14 +102,14 @@ Cat subroutine at <Addr>
 
 
 
-5: OC8_IS_TYPE_SKIP_E_IMM <X, NN> (opcode: 3XNN)
+5: 3XNN <X, NN>
 
 Operands:
 Reg X: <X>
 Immediate I: <NN>
 
 Assembly Syntax:
-skpe I, V<X>, 
+skpe I, %v<X>, 
 
 Effects:
 if (Vx == I)
@@ -118,14 +123,14 @@ Skip next instruction if VX == I
 
 
 
-6: OC8_IS_TYPE_SKIP_NE_IMM <X, NN> (opcode: 4XNN)
+6: 4XNN <X, NN>
 
 Operands:
 Reg X: <X>
 Immediate I: <NN>
 
 Assembly Syntax:
-skpne I, V<X>, 
+skpn I, %v<X>, 
 
 Effects:
 if (VX != I)
@@ -138,14 +143,14 @@ Skip next instruction if VX != I
 
 
 
-7: OC8_IS_TYPE_SKIP_E_REG <X, Y> (opcode: 5XY0)
+7: 5XY0 <X, Y>
 
 Operands:
 Reg X: <X>
 Reg Y: <Y>
 
 Assembly Syntax:
-skpe V<Y>, V<X>, 
+skpe %v<Y>, %v<X>, 
 
 Effects:
 if (VY == VX)
@@ -159,14 +164,14 @@ Skip next instruction if VX == VY
 
 
 
-8: OC8_IS_TYPE_LD_IMM <X, NN> (opcode: 6XNN)
+8: 6XNN <X, NN>
 
 Operands:
 Reg X: <X>
 Imm I: <NN>
 
 Assembly Syntax:
-mov I, V<X>
+mov I, %v<X>
 
 Effects:
 Vx <- I
@@ -178,14 +183,14 @@ Load immediate 8bit val to register
 
 
 
-9: OC8_IS_TYPE_ADD_IMM <X, NN> (opcode: 7XNN)
+9: 7XNN <X, NN>
 
 Operands:
 Reg X: <X>
 Imm I: <NN>
 
 Assembly Syntax:
-add I, V<X>
+add I, %v<X>
 
 Effects:
 VX <- VX + I
@@ -197,14 +202,14 @@ Add 8b immediate value I to register VX
 
 
 
-10: OC8_IS_TYPE_LD_REG <X, Y> (opcode: 8XY0)
+10: 8XY0 <X, Y>
 
 Operands:
 Reg X: <X>
 Reg Y: <Y>
 
 Assembly Syntax:
-mov V<Y>, V<X>
+mov %v<Y>, %v<X>
 
 Effects:
 VX <- VY
@@ -216,14 +221,14 @@ Load value of reg V<Y> into reg <X>
 
 
 
-11: OC8_IS_TYPE_OR <X, Y> (opcode: 8XY1)
+11: 8XY1 <X, Y>
 
 Operands:
 Reg X: <X>
 Reg Y: <Y>
 
 Assembly Syntax:
-or V<Y>, V<X>
+or %v<Y>, %v<X>
 
 Effects:
 VX <- VX | VY
@@ -236,14 +241,14 @@ Or V<X> with V<Y> and store back result in V<X>
 
 
 
-12: OC8_IS_TYPE_AND <X, Y> (opcode: 8XY2)
+12: 8XY2 <X, Y>
 
 Operands:
 Reg X: <X>
 Reg Y: <Y>
 
 Assembly Syntax:
-and V<Y>, V<X>
+and %v<Y>, %v<X>
 
 Effects:
 VX <- VX & VY
@@ -257,14 +262,14 @@ And V<X> with V<Y> and store back result in V<X>
 
 
 
-13: OC8_IS_TYPE_XOR <X, Y> (opcode: 8XY3)
+13: 8XY3 <X, Y>
 
 Operands:
 Reg X: <X>
 Reg Y: <Y>
 
 Assembly Syntax:
-xor V<Y>, V<X>
+xor %v<Y>, %v<X>
 
 Effects:
 VX <- VX ^ VY
@@ -277,14 +282,14 @@ Xor V<X> with V<Y> and store back result in V<X>
 
 
 
-14: OC8_IS_TYPE_ADD_REG <X, Y> (opcode: 8XY4)
+14: 8XY4 <X, Y>
 
 Operands:
 Reg X: <X>
 Reg Y: <Y>
 
 Assembly Syntax:
-add V<Y>, V<X>
+add %v<Y>, %v<X>
 
 Effects:
 VF <- VX + VY > 255 ? 1 : 0
@@ -297,14 +302,14 @@ Set VF to 1 if there is carry, otherwhise to 0
 
 
 
-15: OC8_IS_TYPE_SUB <X, Y> (opcode: 8XY5)
+15: 8XY5 <X, Y>
 
 Operands:
 Reg X: <X>
 Reg Y: <Y>
 
 Assembly Syntax:
-sub V<Y>, V<X>
+sub %v<Y>, %v<X>
 
 Effects:
 VF <- VX > Vy ? 1 : 0
@@ -319,14 +324,14 @@ Set VF to 0 if there is borrow, otherwhise to 1
 
 
 
-16: OC8_IS_TYPE_SHR <X, Y> (opcode: 8XY6)
+16: 8XY6 <X, Y>
 
 Operands:
 Reg X: <X>
 Reg Y: <Y>
 
 Assembly Syntax:
-shr V<Y>, V<X>
+shr %v<Y>, %v<X>
 
 Effects:
 VF <- VY & 0x1
@@ -336,21 +341,20 @@ Description:
 Do a logical shift right of V<Y>, and store result in V<X>
 Set VF to 1 is the least significant bit of V<Y> is set, otherwhise to 0
 (prior to shifting)
-
-@TODO Some inplems of shr ignore V<Y>, they load and store from V<X>. Which to do ?
-
+Remarks: Some implems ignore V<Y>, they load and store from V<X>.
 
 
 
 
-17: OC8_IS_TYPE_SUBN <X, Y> (opcode: 8XY7)
+
+17: 8XY7 <X, Y>
 
 Operands:
 Reg X: <X>
 Reg Y: <Y>
 
 Assembly Syntax:
-subn V<Y>, V<X>
+subn %v<Y>, %v<X>
 
 Effects:
 VF <- VY > VX ? 1 : 0
@@ -367,14 +371,14 @@ Set VF to 0 if there is borrow, otherwhise to 1
 
 
 
-18: OC8_IS_TYPE_SHL <X, Y> (opcode: 8XYE)
+18: 8XYE <X, Y>
 
 Operands:
 Reg X: <X>
 Reg Y: <Y>
 
 Assembly Syntax:
-shl V<Y>, V<X>
+shl %v<Y>, %v<X>
 
 Effects:
 VF <- VY & 0x80 ? 1 : 0
@@ -384,22 +388,21 @@ Description:
 Do a logical shift left of V<Y>, and store result in V<X>
 Set VF to 1 is the most significant bit of V<Y> is set, otherwhise to 0
 (prior to shifting)
-
-@TODO Some inplems of shl ignore V<Y>, they load and store from V<X>. Which to do ?
-
+Remarks: Some implems ignore V<Y>, they load and store from V<X>.
 
 
 
 
 
-19: OC8_IS_TYPE_SKIP_NE_REG <X, Y> (opcode: 9XY0)
+
+19: 9XY0 <X, Y>
 
 Operands:
 Reg X: <X>
 Reg Y: <Y>
 
 Assembly Syntax:
-skipne V<Y>, V<X>
+skipn %v<Y>, %v<X>
 
 Effects:
 if (VY != VX)
@@ -416,13 +419,13 @@ Skip next instruction if VY != VX
 
 
 
-20: OC8_IS_TYPE_ST_I <NNN> (opcode: ANNN)
+20: ANNN <NNN>
 
 Operands:
 Addr: <NNN>
 
 Assembly Syntax:
-mov <Addr>, I
+mov <Addr>, %i
 
 Effects:
 I <- <Addr>
@@ -435,13 +438,13 @@ Set the address stored in I at <Addr>
 
 
 
-21: OC8_IS_TYPE_JMP_V0 <NNN> (opcode: BNNN)
+21: BNNN <NNN>
 
 Operands:
 Addr: <NNN>
 
 Assembly Syntax:
-jmp <Addr>(V0)
+jmp <Addr>(%v0)
 
 Effects:
 pc <- <Addr> + <V0>
@@ -454,14 +457,14 @@ Jump to <ADDR> + V0
 
 
 
-22: OC8_IS_TYPE_RAND <X, NN> (opcode: CXNN)
+22: CXNN <X, NN>
 
 Operands:
 Reg X: <X>
 Imm I: <NN>
 
 Assembly Syntax:
-rand <Addr>(V0)
+rand I, %v<X>
 
 Effects:
 V<X> <- Rand(0, 256) & <I>
@@ -473,7 +476,7 @@ Generate a number between 0 and 255 included, xor it with Immediate <I>, and sto
 
 
 
-23: OC8_IS_TYPE_DRAW <X, Y, N> (opcode: DXYN)
+23: DXYN <X, Y, N>
 
 Operands:
 Reg X: <X>
@@ -481,7 +484,7 @@ Reg Y: <Y>
 Imm I: <N>
 
 Assembly Syntax:
-draw V<X>, V<Y>, <I>
+draw %v<X>, %v<Y>, <I>
 
 Effects:
 See description
@@ -501,13 +504,13 @@ and the lsb to the right-might pixel.
 
 
 
-24: OC8_IS_TYPE_SKIP_KP <X> (opcode: EX9E)
+24: EX9E <X>
 
 Operands:
 Reg X: <X>
 
 Assembly Syntax:
-skpp V<X>
+skpkp %v<X>
 
 Effects:
 if (key_pressed(V<X>))
@@ -520,13 +523,13 @@ Skip the next instruction if the key stored in V<X> is pessed
 
 
 
-25: OC8_IS_TYPE_SKIP_KNP <X> (opcode: EXA1)
+25: EXA1 <X>
 
 Operands:
 Reg X: <X>
 
 Assembly Syntax:
-skpnp V<X>
+skpkn %v<X>
 
 Effects:
 if (!key_pressed(V<X>))
@@ -540,13 +543,13 @@ Skip the next instruction if the key stored in V<X> is not pessed
 
 
 
-26: OC8_IS_TYPE_LD_DT <X> (opcode: FX07)
+26: FX07 <X>
 
 Operands:
 Reg X: <X>
 
 Assembly Syntax:
-mov DT, V<X>
+mov %dt, %v<X>
 
 Effects:
 V<X> <- DelayTimer
@@ -559,13 +562,13 @@ Set V<X> to the value of the Delay Timer.
 
 
 
-27: OC8_IS_TYPE_LD_K <X> (opcode: FX0A)
+27: FX0A <X>
 
 Operands:
 Reg X: <X>
 
 Assembly Syntax:
-waitk V<X>
+waitk %v<X>
 
 Effects:
 V<X> <- wait_key()
@@ -581,13 +584,13 @@ I return the one with the lowest index.
 
 
 
-28: OC8_IS_TYPE_ST_DT <X> (opcode: FX15)
+28: FX15 <X>
 
 Operands:
 Reg X: <X>
 
 Assembly Syntax:
-mov V<X>, DT
+mov %v<X>, %dt
 
 Effects:
 DelayTimer <- V<X>
@@ -599,13 +602,13 @@ Set the Delay Timer to V<X>
 
 
 
-29: OC8_IS_TYPE_ST_ST <X> (opcode: FX18)
+29: FX18 <X>
 
 Operands:
 Reg X: <X>
 
 Assembly Syntax:
-mov V<X>, ST
+mov %v<X>, %st
 
 Effects:
 SountTimer <- V<X>
@@ -618,36 +621,36 @@ Set the Sound Timer to V<X>
 
 
 
-30: OC8_IS_TYPE_ADD_I <X> (opcode: FX1E)
+30: FX1E <X>
 
 Operands:
 Reg X: <X>
 
 Assembly Syntax:
-add V<X>, I
+add %v<X>, %i
 
 Effects:
-VF <- I + V<X> > 0xFFF ? 1 : 0
+#VF <- I + V<X> > 0xFFF ? 1 : 0 (See Remarks)
 I <- I + V<X>
 
 Description:
 Add V<X> to I.
 Undocument feature, according to Wikipedia Page:
 If the calculation overflows the valid range (0xFFF), VF is set to 1, otherwhise to 0.
-@TODO: I didn't implement VF edit, should I ?
+Remarks: Some implems, like mine, dont implement VF edit
 
 
 
 
 
 
-31: OC8_IS_TYPE_LD_F <X> (opcode: FX29)
+31: FX29 <X>
 
 Operands:
 Reg X: <X>
 
 Assembly Syntax:
-ldhs V<X>
+fspr %v<X>
 
 Effects:
 I <- get_sprite_addr_of_hex_digit(V<X> & 0xF)
@@ -664,13 +667,13 @@ V<X> in range 0-255, I & oxF to get hexa digit
 
 
 
-32: OC8_IS_TYPE_LD_B <X> (opcode: FX33)
+32: FX33 <X>
 
 Operands:
 Reg X: <X>
 
 Assembly Syntax:
-ldbcd V<X>
+bcd %v<X>
 
 Effects:
 I[0:2] <- bcd(V<X>)
@@ -684,13 +687,13 @@ and units at I[2]
 
 
 
-33: OC8_IS_TYPE_ST_REGS <X> (opcode: FX55)
+33: FX55 <X>
 
 Operands:
 Reg X: <X>
 
 Assembly Syntax:
-movm V<X>, I
+movm %v<X>, %i
 
 Effects:
 I[0:<X>+1] <- (V0, V1, ..., V<X>)
@@ -699,21 +702,20 @@ I <- I + <X> + 1
 Description:
 Store registers V0 to V<X> in order at adresses starting at I.
 Then increment I by <X> + 1
-In some versions, I not increemented.
-@TODO Should I really increment it ?
+Remarks: Some versions don't modify I
 
 
 
 
 
 
-34: OC8_IS_TYPE_LD_REGS <X> (opcode: FX65)
+34: FX65 <X>
 
 Operands:
 Reg X: <X>
 
 Assembly Syntax:
-movm I, V<X>
+movm %i, %v<X>
 
 Effects:
 (V0, V1, ..., V<X>) <- I[0:<X>+1]
@@ -722,5 +724,4 @@ I <- I + <X> + 1
 Description:
 Load registers V0 to V<X> in order from data at adresses starting at I.
 Then increment I by <X> + 1
-In some versions, I not increemented
-@TODO Should I really increment it ?
+Remarks: Some versions don't modify I

@@ -1,0 +1,117 @@
+
+This document describe the syntax of the assembly files (.cs8)
+
+# Instructions
+
+
+
+## add
+
+add <Src:NN>, %v<Dst:X>			(7XNN)
+add %v<Src:Y>, %v<Dts:X>		(8XY4)
+add %v<Src:X>, %i			(FX1E)
+
+## and
+
+and %v<Src:Y>, %v<Dts:X>		(8XY2)
+
+## bcd
+
+bcd %v<Src:X>				(FX33)
+
+## call
+
+call <Addr:NNN>				(2NNN)
+
+## cls
+
+cls (00E0)
+
+## draw
+
+draw %v<X:X>, %v<Y:Y>, <H:N>		(DXYN)
+
+## fspr
+
+fspr %v<Src:X>				(FX29)
+
+## jmp
+
+jmp <Addr:NNN>				(1NNN)
+jmp <Addr:NNN>(%v0)			(BNNN)
+
+## mov
+
+mov <Src:NN>, %v<Dst:X>			(6XNN)
+mov %v<Src:Y>, %v<Dts:X>		(8XY0)
+mov <Addr:NNN>, %i			(ANNN)
+mov %dt, %v<Dst:X>			(FX07)
+mov %v<Src:X>, %dt			(FX15)
+mov %v<Src:X>, %st			(FX18)
+
+## movm
+
+movm %v<Src:X>, %i			(FX55)
+movm %i, %v<Dst:X>			(FX65)
+
+## or
+
+or %v<Src:Y>, %v<Dts:X>			(8XY1)
+
+## rand
+
+rand <Mask:NN>, %v<Dst:X>		(CXNN)
+
+## ret
+
+ret (00EE)
+
+## shl
+
+shl %v<Src:Y>, %v<Dts:X>		(8XYE)
+
+## shr
+
+shr %v<Src:Y>, %v<Dts:X>		(8XY6)
+
+## skp{cc}
+
+cc: condition code (e or n)
+skpe <Y:NN>, %v<X:X>			(3XNN)
+skpe %v<Y:Y>, %v<X:X>			(5XY0)
+skpn <Y:NN>, %v<X:X>			(4XNN)
+skpn %v<Y:Y>, %v<X:X>			(9XY0)
+
+## skpk{cc}
+
+cc: condition code (p or n)
+skpkp %v<K:X>				(EX9E)
+skpkn %v<K:X>				(EXA1)
+
+## sub
+
+sub %v<Src:Y>, %v<Dts:X>		(8XY5)
+
+## subn
+
+subn %v<Src:Y>, %v<Dts:X>		(8XY7)
+
+## sys
+
+sys <Addr:NNN>				(0NNN)
+
+## waitk
+
+waitk %v<Dst:X>				(FX0A)
+
+## xor
+
+xor %v<Src:Y>, %v<Dts:X>		(8XY3)
+
+
+
+
+
+
+# Directives
+
