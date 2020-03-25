@@ -25,7 +25,7 @@ call <Addr:NNN>				(2NNN)
 
 ## cls
 
-cls (00E0)
+cls					(00E0)
 
 ## draw
 
@@ -110,8 +110,83 @@ xor %v<Src:Y>, %v<Dts:X>		(8XY3)
 
 
 
-
-
-
 # Directives
 
+
+
+## .align <nbytes>
+
+Make the next data aligned correctly.
+Advance the location counter until it's a multiple of nbytes.
+Pad with 0.
+
+## .byte <uint>
+
+Write 1 byte of data
+
+## .globl <symbol>
+
+Make a symbol visible to other compilation units.
+Otherwhise only visible in the current file.
+Can be anywhere before or after the symbol definition
+
+## .equ <name>, <value>
+
+Constant definition.
+When using <name> as an operand, get replaced by <value>
+
+## .size <symbol>, <size>
+
+Size in bytes of the data associacted with a symbol.
+For a function, it's the size of the whole code.
+For a variable, it's the space it takes.
+Can be anywhere before or after the symbol definition
+
+## .type <symbol>, @<type>
+
+Set the type of a symbol. Can be any of these:
+- function
+- object (variables)
+- notype
+Default is notype
+Can be anywhere before or after the synbol definition
+
+## .word <uint>
+
+Write 2 bytes of data
+
+## .zero <n>
+
+Write n bytes of 0
+
+
+
+# File Syntax
+
+file: <declaration>*
+
+declaration: \s* (<instruction> | <directive> | <comment> | <symbol>)
+
+
+instruction: @id \s+ @list<<op>, ','>
+
+directive: '.' @id \s+ @list<@id, ','>
+
+comment: '#' .* '\n'
+
+symbol: @id ':'
+
+
+op:  <op_imm>
+   | <op_reg>
+   | <op_indirect_off>
+
+
+op_imm: @int10
+      | 0x@int16
+      | 0@int8
+      | 0b@int2
+
+op_reg: '%' @id
+
+op_indirect_off: <op_imm> '(' <op_reg> ')'

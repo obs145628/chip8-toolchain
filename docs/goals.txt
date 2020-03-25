@@ -26,3 +26,32 @@ Other Ideas (not sure I am going to do it yet, depends how the project and Covid
 
 - Add debug infos to lanexpr, and to ODB, so that I can debug using the lanexpr code.
 - Build a JIT for the emulator, that emit x64 code.
+
+
+
+
+Libraries:
+
+- oc8_is
+
+Parse / Dump instructions in binary format
+
+- oc8_emu: (oc8_is)
+
+Emulate the CHIP-8 CPU and run instructions
+
+
+
+- oc8_as
+
+- C8S struct with API to build one
+- Reader: parse `.c8s` files and use API above to build C8S struct
+- Write: Generate string (.c8s format) from the C8S struct,
+   than can be parsed again from the reader
+
+- oc8_obj
+
+Read / Write / Dump / Create `.c8o` files
+
+- oc8_ld: oc8_obj
+
