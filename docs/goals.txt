@@ -42,7 +42,7 @@ Emulate the CHIP-8 CPU and run instructions
 
 
 
-- oc8_as
+- oc8_as : (oc8_smap)
 
 - C8S struct with API to build one
 - Reader: parse `.c8s` files and use API above to build C8S struct
@@ -55,3 +55,11 @@ Read / Write / Dump / Create `.c8o` files
 
 - oc8_ld: oc8_obj
 
+
+
+- oc8_smap
+
+Basic implementation of a map<string, size_t>.
+Implementation based on linkled lists, will try to do best better.
+Used by many libraries that need symbol tables.
+The val size_t can store any pointer, and is often used as such

@@ -8,12 +8,12 @@ This document describe the syntax of the assembly files (.cs8)
 ## add
 
 add <Src:NN>, %v<Dst:X>			(7XNN)
-add %v<Src:Y>, %v<Dts:X>		(8XY4)
+add %v<Src:Y>, %v<Dst:X>		(8XY4)
 add %v<Src:X>, %i			(FX1E)
 
 ## and
 
-and %v<Src:Y>, %v<Dts:X>		(8XY2)
+and %v<Src:Y>, %v<Dst:X>		(8XY2)
 
 ## bcd
 
@@ -43,7 +43,7 @@ jmp <Addr:NNN>(%v0)			(BNNN)
 ## mov
 
 mov <Src:NN>, %v<Dst:X>			(6XNN)
-mov %v<Src:Y>, %v<Dts:X>		(8XY0)
+mov %v<Src:Y>, %v<Dst:X>		(8XY0)
 mov <Addr:NNN>, %i			(ANNN)
 mov %dt, %v<Dst:X>			(FX07)
 mov %v<Src:X>, %dt			(FX15)
@@ -56,7 +56,7 @@ movm %i, %v<Dst:X>			(FX65)
 
 ## or
 
-or %v<Src:Y>, %v<Dts:X>			(8XY1)
+or %v<Src:Y>, %v<Dst:X>			(8XY1)
 
 ## rand
 
@@ -68,11 +68,11 @@ ret (00EE)
 
 ## shl
 
-shl %v<Src:Y>, %v<Dts:X>		(8XYE)
+shl %v<Src:Y>, %v<Dst:X>		(8XYE)
 
 ## shr
 
-shr %v<Src:Y>, %v<Dts:X>		(8XY6)
+shr %v<Src:Y>, %v<Dst:X>		(8XY6)
 
 ## skp{cc}
 
@@ -90,11 +90,11 @@ skpkn %v<K:X>				(EXA1)
 
 ## sub
 
-sub %v<Src:Y>, %v<Dts:X>		(8XY5)
+sub %v<Src:Y>, %v<Dst:X>		(8XY5)
 
 ## subn
 
-subn %v<Src:Y>, %v<Dts:X>		(8XY7)
+subn %v<Src:Y>, %v<Dst:X>		(8XY7)
 
 ## sys
 
@@ -106,7 +106,7 @@ waitk %v<Dst:X>				(FX0A)
 
 ## xor
 
-xor %v<Src:Y>, %v<Dts:X>		(8XY3)
+xor %v<Src:Y>, %v<Dst:X>		(8XY3)
 
 
 
