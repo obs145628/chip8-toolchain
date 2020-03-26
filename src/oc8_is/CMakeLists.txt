@@ -6,6 +6,7 @@ add_library(oc8_is ${SRC})
 
 set(TEST_SRC
   test_main.cc
+  test_encode.cc
   test_ins.cc
 )
 set(TEST_NAME utest_oc8is.bin)

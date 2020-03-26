@@ -1,6 +1,7 @@
 #include "oc8_is/ins.h"
 
 #include <stdio.h>
+#include <string.h>
 
 // swap byte 1 and byte 2
 #define OPCODE_SWAP(X) ((X << 8) | (X >> 8))
@@ -244,10 +245,156 @@ int oc8_is_decode_ins(oc8_is_ins_t *ins, const char *buf) {
 /// Encode the instruction `ins`
 /// Write the opcode in 2 bytes of `buf`
 /// Also write it in opcode field of `ins`
-/// @returnds != 0 il failed to encode instruction
-int oc8_is_encode_ins(const oc8_is_ins_t *ins, char *buf) {
-  // @TODO
-  (void)ins;
-  (void)buf;
+/// @returns != 0 il failed to encode instruction
+int oc8_is_encode_ins(oc8_is_ins_t *ins, char *buf) {
+  if (ins->opcode) {
+    if (buf)
+      memcpy(buf, &ins->opcode, 2);
+    return 0;
+  }
+
+  uint16_t opcode;
+
+  switch (ins->type) {
+    // @TODO encode all instructions
+  case OC8_IS_TYPE_0NNN:
+    opcode = ins->operands[0];
+    break;
+  case OC8_IS_TYPE_00E0:
+    opcode = 0x00E0;
+    break;
+  case OC8_IS_TYPE_00EE:
+    opcode = 0x00EE;
+    break;
+  case OC8_IS_TYPE_1NNN:
+    opcode = (0x1 << 12) | ins->operands[0];
+    break;
+  case OC8_IS_TYPE_2NNN:
+    opcode = (0x2 << 12) | ins->operands[0];
+    break;
+  case OC8_IS_TYPE_3XNN:
+    opcode = (0x3 << 12) | (ins->operands[0] << 8) | ins->operands[1];
+    break;
+  case OC8_IS_TYPE_4XNN:
+    opcode = (0x4 << 12) | (ins->operands[0] << 8) | ins->operands[1];
+    break;
+  case OC8_IS_TYPE_5XY0:
+    opcode = (0x5 << 12) | (ins->operands[0] << 8) | (ins->operands[1] << 4);
+    break;
+  case OC8_IS_TYPE_6XNN:
+    opcode = (0x6 << 12) | (ins->operands[0] << 8) | ins->operands[1];
+    break;
+  case OC8_IS_TYPE_7XNN:
+    opcode = (0x7 << 12) | (ins->operands[0] << 8) | ins->operands[1];
+    break;
+  case OC8_IS_TYPE_8XY0:
+    opcode = (0x8 << 12) | (ins->operands[0] << 8) | (ins->operands[1] << 4);
+    break;
+
+  case OC8_IS_TYPE_8XY1:
+    opcode = 0x8001 | (ins->operands[0] << 8) | (ins->operands[1] << 4);
+    break;
+
+  case OC8_IS_TYPE_8XY2:
+    opcode = 0x8002 | (ins->operands[0] << 8) | (ins->operands[1] << 4);
+    break;
+
+  case OC8_IS_TYPE_8XY3:
+    opcode = 0x8003 | (ins->operands[0] << 8) | (ins->operands[1] << 4);
+    break;
+
+  case OC8_IS_TYPE_8XY4:
+    opcode = 0x8004 | (ins->operands[0] << 8) | (ins->operands[1] << 4);
+    break;
+
+  case OC8_IS_TYPE_8XY5:
+    opcode = 0x8005 | (ins->operands[0] << 8) | (ins->operands[1] << 4);
+    break;
+
+  case OC8_IS_TYPE_8XY6:
+    opcode = 0x8006 | (ins->operands[0] << 8) | (ins->operands[1] << 4);
+    break;
+
+  case OC8_IS_TYPE_8XY7:
+    opcode = 0x8007 | (ins->operands[0] << 8) | (ins->operands[1] << 4);
+    break;
+
+  case OC8_IS_TYPE_8XYE:
+    opcode = 0x800E | (ins->operands[0] << 8) | (ins->operands[1] << 4);
+    break;
+
+  case OC8_IS_TYPE_9XY0:
+    opcode = 0x9000 | (ins->operands[0] << 8) | (ins->operands[1] << 4);
+    break;
+
+  case OC8_IS_TYPE_ANNN:
+    opcode = 0xA000 | ins->operands[0];
+    break;
+
+  case OC8_IS_TYPE_BNNN:
+    opcode = 0xB000 | ins->operands[0];
+    break;
+
+  case OC8_IS_TYPE_CXNN:
+    opcode = 0xC000 | (ins->operands[0] << 8) | ins->operands[1];
+    break;
+
+  case OC8_IS_TYPE_DXYN:
+    opcode = 0xD000 | (ins->operands[0] << 8) | (ins->operands[1] << 4) |
+             ins->operands[2];
+    break;
+
+  case OC8_IS_TYPE_EX9E:
+    opcode = 0xE09E | (ins->operands[0] << 8);
+    break;
+
+  case OC8_IS_TYPE_EXA1:
+    opcode = 0xE0A1 | (ins->operands[0] << 8);
+    break;
+
+  case OC8_IS_TYPE_FX07:
+    opcode = 0xF007 | (ins->operands[0] << 8);
+    break;
+
+  case OC8_IS_TYPE_FX0A:
+    opcode = 0xF00A | (ins->operands[0] << 8);
+    break;
+
+  case OC8_IS_TYPE_FX15:
+    opcode = 0xF015 | (ins->operands[0] << 8);
+    break;
+
+  case OC8_IS_TYPE_FX18:
+    opcode = 0xF018 | (ins->operands[0] << 8);
+    break;
+
+  case OC8_IS_TYPE_FX1E:
+    opcode = 0xF01E | (ins->operands[0] << 8);
+    break;
+
+  case OC8_IS_TYPE_FX29:
+    opcode = 0xF029 | (ins->operands[0] << 8);
+    break;
+
+  case OC8_IS_TYPE_FX33:
+    opcode = 0xF033 | (ins->operands[0] << 8);
+    break;
+
+  case OC8_IS_TYPE_FX55:
+    opcode = 0xF055 | (ins->operands[0] << 8);
+    break;
+
+  case OC8_IS_TYPE_FX65:
+    opcode = 0xF065 | (ins->operands[0] << 8);
+    break;
+
+  default:
+    return 1;
+  }
+
+  ins->opcode = OPCODE_SWAP(opcode);
+  if (buf) {
+    memcpy(buf, &ins->opcode, 2);
+  }
   return 0;
 }

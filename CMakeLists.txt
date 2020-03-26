@@ -5,7 +5,7 @@ include_directories(SYSTEM "./extern/Catch2/single_include/")
 include_directories("./include/")
 
 set(CMAKE_C_COMPILER gcc)
-set(CMAKE_C_FLAGS "-std=c99 -Wall -Wextra -Werror -pedantic -O0 -g3")
+set(CMAKE_C_FLAGS "-std=c99 -Wall -Wextra -Werror -O0 -g3")
 
 set(CMAKE_CXX_COMPILER)
 set(CMAKE_CXX_FLAGS "-std=c++17 -Wall -Wextra -Werror -O0 -g3")
