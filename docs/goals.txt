@@ -32,34 +32,37 @@ Other Ideas (not sure I am going to do it yet, depends how the project and Covid
 
 Libraries:
 
-- oc8_is
+# oc8_is
 
-Parse / Dump instructions in binary format
+- Encoder: encode ins to binary from ins struct
+- Decoder: decode ins to ins struct from binary
 
-- oc8_emu: (oc8_is)
+# oc8_emu: (oc8_is)
 
 Emulate the CHIP-8 CPU and run instructions
 
+# oc8_as : (oc8_is, oc8_obj, oc8_smap)
 
-
-- oc8_as : (oc8_smap)
-
-- C8S struct with API to build one
+- API to build asm struct
 - Reader: parse `.c8s` files and use API above to build C8S struct
-- Write: Generate string (.c8s format) from the C8S struct,
-   than can be parsed again from the reader
+- Printer: Generate string (.c8s format) from the C8S struct,
+  that can be parsed again with the reader
+- Assembler: build obj struct from asm struct
 
-- oc8_obj
+# oc8_obj
 
-Read / Write / Dump / Create `.c8o` files
+- API to build obj struct
+- BinReader: Read binary `.c8o` file and build obj struct
+- BinWriter: Write binary `.c8o` file from obj struct
+- Printer: Generate human-readable string from obj struct.
 
-- oc8_ld: oc8_obj
+# oc8_ld: (oc8_obj)
 
 
 
-- oc8_smap
+# oc8_smap
 
 Basic implementation of a map<string, size_t>.
-Implementation based on linkled lists, will try to do best better.
+Implementation based on linkled lists, will try to do best later.
 Used by many libraries that need symbol tables.
 The val size_t can store any pointer, and is often used as such
