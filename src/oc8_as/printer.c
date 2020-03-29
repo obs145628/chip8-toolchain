@@ -1,6 +1,7 @@
 #define _GNU_SOURCE
 
 #include "oc8_as/printer.h"
+#include "oc8_defs/oc8_defs.h"
 #include "oc8_is/ins.h"
 
 #include <assert.h>
@@ -83,7 +84,7 @@ static void write_bytes(printer_t *printer, const char *buf, size_t len) {
 // @param idx index if syms_defs_arr
 static void write_symbol_def(printer_t *printer) {
 
-  char buf[64];
+  char buf[OC8_MAX_SYM_SIZE + 32];
 
   oc8_as_sym_def_t *def = &printer->sf->syms_defs_arr[printer->next_def_idx];
   // @TODO cannot write symbols too long
@@ -111,7 +112,7 @@ static void write_symbol_def(printer_t *printer) {
 }
 
 static void write_ins(printer_t *printer, oc8_as_data_item_t item) {
-  char buf[32];
+  char buf[OC8_MAX_SYM_SIZE + 32];
   oc8_is_ins_t ins;
   uint16_t opcode = item.ins_opcode;
   const char *sym = item.sym_idx ? printer->inv_sym[item.sym_idx] : NULL;

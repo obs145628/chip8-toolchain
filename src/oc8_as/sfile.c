@@ -1,8 +1,10 @@
 #include "oc8_as/sfile.h"
+#include "oc8_defs/oc8_defs.h"
 
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "oc8_is/ins.h"
 
@@ -114,6 +116,15 @@ void oc8_as_sfile_check(oc8_as_sfile_t *as) {
 }
 
 void oc8_as_sfile_add_sym(oc8_as_sfile_t *as, const char *sym) {
+  size_t len = strlen(sym);
+  if (len > OC8_MAX_SYM_SIZE) {
+    fprintf(stderr,
+            "oc8_as_sfile_add_sym: trying to add symbol `%s` of size %u, but "
+            "max size is %u\n",
+            sym, (unsigned)len, (unsigned)OC8_MAX_SYM_SIZE);
+    assert(0); //@TODO panic
+  }
+
   // Check for label redefinition
   oc8_as_sym_def_t *def = add_sym_def(as, sym);
   if (def->pos != POS_UNDEF) {
@@ -132,6 +143,16 @@ uint16_t oc8_as_sfile_get_sym_idx(oc8_as_sfile_t *as, const char *sym) {
   oc8_smap_node_t *node = oc8_smap_find(&as->syms_map, sym);
   if (node)
     return (uint16_t)node->val;
+
+  size_t len = strlen(sym);
+  if (len > OC8_MAX_SYM_SIZE) {
+    fprintf(
+        stderr,
+        "oc8_as_sfile_get_sym_idx: trying to add symbol `%s` of size %u, but "
+        "max size is %u\n",
+        sym, (unsigned)len, (unsigned)OC8_MAX_SYM_SIZE);
+    assert(0); //@TODO panic
+  }
 
   uint16_t id = as->next_sym_idx++;
   oc8_smap_insert(&as->syms_map, sym, id);
