@@ -91,9 +91,9 @@ static inline unsigned hex_c2i(int c) { // HEX_UNDEF if not in base
   if (c >= '0' && c <= '9')
     return (unsigned)(c - '0');
   else if (c >= 'a' && c <= 'f')
-    return (unsigned)(c - 'a');
-  else if (c >= 'A' && c <= 'A')
-    return (unsigned)(c - 'A');
+    return (unsigned)(c - 'a') + 10;
+  else if (c >= 'A' && c <= 'F')
+    return (unsigned)(c - 'A') + 10;
   else
     return HEX_UNDEF;
 }
@@ -206,6 +206,7 @@ static int r_op(reader_t *is, as_ins_t *ins) {
 
   if (reader_peekc(is) != '(')
     return 1;
+  reader_getc(is);
 
   // <imm> '(' <reg> ')'
   op->type = OP_TYPE_REG_IND;
@@ -236,7 +237,7 @@ static int r_ins_or_label(reader_t *is, as_ins_t *ins) {
 
   for (;;) {
     int c = reader_peekc(is);
-    int is_op = c != '\n' && c != '#';
+    int is_op = c != EOF && c != '\n' && c != '#';
     if (is_op && want_end)
       reader_error(is, "Unexpected operand without ',' separator");
     if (!is_op && want_op)
@@ -311,7 +312,7 @@ static void add_ins(parser_t *parser, as_ins_t *ins) {
   size_t nops = ins->ops_size;
   op_t *op0 = &ins->ops[0];
   op_t *op1 = &ins->ops[1];
-  op_t *op2 = &ins->ops[1];
+  op_t *op2 = &ins->ops[2];
   const char *sym = ins->sym[0] == 0 ? NULL : &ins->sym[0];
 
   if (strcmp(ins->name, "add") == 0) {

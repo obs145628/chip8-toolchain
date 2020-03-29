@@ -9,6 +9,7 @@ target_link_libraries(oc8_as oc8_is oc8_smap)
 
 set(TEST_SRC
   test_main.cc
+  test_parser.cc
   test_sfile.cc
   test_stream.cc
 )
