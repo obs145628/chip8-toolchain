@@ -165,12 +165,12 @@ Write n bytes of 0
 
 file: <declaration>*
 
-declaration: \s* (<instruction> | <directive> | <comment> | <symbol>)
+declaration: \s* (<ins> | <dir> | <comment> | <symbol>)
 
 
-instruction: @id \s+ @list<<op>, ','>
+in: @id \s+ @list<<op>, ','>
 
-directive: '.' @id \s+ @list<@id, ','>
+dir: '.' @id \s+ @list<@id, ','>
 
 comment: '#' .* '\n'
 
@@ -186,7 +186,7 @@ op_imm: @int10
       | 0x@int16
       | 0@int8
       | 0b@int2
-      | @str  //symbol
+      | @id  //symbol
 
 op_reg: '%' @id
 

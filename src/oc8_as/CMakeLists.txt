@@ -1,4 +1,5 @@
 set(SRC
+  parser.c
   printer.c
   sfile.c
   stream.c

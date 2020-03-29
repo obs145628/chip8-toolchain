@@ -17,16 +17,30 @@
 #include <stddef.h>
 #include <stdint.h>
 
-#include "oc8_smap/oc8_smap.h"
+#include "sfile.h"
+#include "stream.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-typedef struct {
-  void *tood;
-  // @TODO
-} oc8_as_parser_t;
+// @TODO
+
+/// Parse an input stream to build an sfile
+/// User is reponsible for deallocating the sfile and `is`
+/// @param is_name name given to the stream for better error messages. optional
+/// @returns pointer to newly allocated sfile
+oc8_as_sfile_t *oc8_as_run_parser(oc8_as_stream_t *is, const char *is_name);
+
+/// Parse an input file to build an sfile
+/// User is reponsible for deallocating the sfile
+/// @returns pointer to newly allocated sfile
+oc8_as_sfile_t *oc8_as_parse_file(const char *path);
+
+/// Parse a raw ascii string to build an sfile
+/// User is reponsible for deallocating the sfile
+/// @returns pointer to newly allocated sfile
+oc8_as_sfile_t *oc8_as_parse_raw(const char *str, size_t len);
 
 #ifdef __cplusplus
 }
