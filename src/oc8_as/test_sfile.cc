@@ -395,6 +395,7 @@ TEST_CASE("sfile simple label", "") {
   oc8_as_sfile_ins_ret(sf);
   auto code = split(trim(print_short(sf)), '\n');
 
+  REQUIRE(code.size() == 3);
   REQUIRE(trim(code[0]) == "cls");
   REQUIRE(trim(code[1]) == "foo:");
   REQUIRE(trim(code[2]) == "ret");
@@ -411,6 +412,7 @@ TEST_CASE("sfile infos label", "") {
   oc8_as_sfile_dir_type(sf, "foo", OC8_AS_DATA_SYM_TYPE_FUN);
   auto code = split(trim(print_short(sf)), '\n');
 
+  REQUIRE(code.size() == 6);
   REQUIRE(trim(code[0]) == "cls");
   REQUIRE(trim(code[1]) == ".size foo, 8");
   REQUIRE(trim(code[2]) == ".type foo, @function");
@@ -450,4 +452,46 @@ TEST_CASE("sfile addr values", "") {
   REQUIRE(sf->curr_addr == 14);
 
   oc8_as_sfile_free(sf);
+}
+
+TEST_CASE("sfile function fibo", "") {
+  oc8_as_sfile_t *sf = oc8_as_sfile_new();
+
+  oc8_as_sfile_dir_globl(sf, "fibo");
+  oc8_as_sfile_dir_type(sf, "fibo", OC8_AS_DATA_SYM_TYPE_FUN);
+  oc8_as_sfile_add_sym(sf, "fibo");
+  oc8_as_sfile_ins_mov_imm(sf, 0, 0x1);
+  oc8_as_sfile_ins_mov_imm(sf, 1, 0x2);
+
+  oc8_as_sfile_add_sym(sf, "L0");
+  oc8_as_sfile_ins_skpn_imm(sf, 0, 0x0);
+  oc8_as_sfile_sins_jmp(sf, "L1");
+  oc8_as_sfile_ins_mov(sf, 0x2, 0x3);
+  oc8_as_sfile_ins_add(sf, 0x1, 0x2);
+  oc8_as_sfile_ins_mov(sf, 0x3, 0x1);
+  oc8_as_sfile_ins_add_imm(sf, 0xFF, 0x0);
+  oc8_as_sfile_sins_jmp(sf, "L0");
+
+  oc8_as_sfile_add_sym(sf, "L1");
+  oc8_as_sfile_ins_mov(sf, 0x1, 0x0);
+  oc8_as_sfile_ins_ret(sf);
+  auto code = split(trim(print_short(sf)), '\n');
+
+  REQUIRE(code.size() == 16);
+  REQUIRE(trim(code[0]) == ".type fibo, @function");
+  REQUIRE(trim(code[1]) == ".globl fibo");
+  REQUIRE(trim(code[2]) == "fibo:");
+  REQUIRE(trim(code[3]) == "mov 0x0, %v1");
+  REQUIRE(trim(code[4]) == "mov 0x1, %v2");
+  REQUIRE(trim(code[5]) == "L0:");
+  REQUIRE(trim(code[6]) == "skpn 0x0, %v0");
+  REQUIRE(trim(code[7]) == "jmp L1");
+  REQUIRE(trim(code[8]) == "mov %v2, %v3");
+  REQUIRE(trim(code[9]) == "add %v1, %v2");
+  REQUIRE(trim(code[10]) == "mov %v3, %v1");
+  REQUIRE(trim(code[11]) == "add 0xFF, %v0");
+  REQUIRE(trim(code[12]) == "jmp L0");
+  REQUIRE(trim(code[13]) == "L1:");
+  REQUIRE(trim(code[14]) == "mov %v1, %v0");
+  REQUIRE(trim(code[15]) == "ret");
 }

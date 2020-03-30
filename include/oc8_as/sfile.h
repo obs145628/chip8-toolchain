@@ -206,9 +206,9 @@ void oc8_as_sfile_dir_align(oc8_as_sfile_t *as, uint16_t nbytes);
 
 void oc8_as_sfile_dir_byte(oc8_as_sfile_t *as, uint8_t val);
 
-void oc8_as_sfile_dir_globl(oc8_as_sfile_t *as, const char *sym);
-
 void oc8_as_sfile_dir_equ(oc8_as_sfile_t *as, const char *key, uint16_t val);
+
+void oc8_as_sfile_dir_globl(oc8_as_sfile_t *as, const char *sym);
 
 void oc8_as_sfile_dir_size(oc8_as_sfile_t *as, const char *sym, uint16_t size);
 

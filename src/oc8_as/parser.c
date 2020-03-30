@@ -11,6 +11,7 @@
 #define MAX_OPS (3)
 #define MAX_INS_NAME_LEN (8)
 #define MAX_REG_NAME_LEN (4)
+#define MAX_DIR_NAME_LEN (16)
 
 // Wrappper around stream, to count lines / cols, and get better error messages
 typedef struct {
@@ -85,6 +86,11 @@ typedef struct {
 
 } as_ins_t;
 
+typedef struct {
+  reader_t is;
+  oc8_as_sfile_t *sf;
+} parser_t;
+
 #define HEX_UNDEF ((unsigned)-1)
 
 static inline unsigned hex_c2i(int c) { // HEX_UNDEF if not in base
@@ -149,6 +155,7 @@ static void r_id(reader_t *is, char *out_buf, size_t max_len,
 
 // If imm is integer, returns it
 // If label, store it in ins->sym
+// If `ins` is NULL, cannot have an @id
 static unsigned r_imm(reader_t *is, as_ins_t *ins) {
   int c = reader_peekc(is);
 
@@ -163,11 +170,18 @@ static unsigned r_imm(reader_t *is, as_ins_t *ins) {
       reader_getc(is);
       return r_int(is, 2, "Base 2 immediate expected");
     }
+
+    c = reader_peekc(is);
+    if (c < '0' || c > '9') // base 8 with only a 0
+      return 0;
     return r_int(is, 8, "Base 8 immediate expected");
   }
 
   if (c >= '1' && c <= '9')
     return r_int(is, 10, "Base 10 immediate expected");
+
+  if (!ins)
+    reader_error(is, "Expected immediate integer value");
 
   if (ins->sym[0])
     reader_error(is, "Cannot have 2 symbols in one instruction");
@@ -263,6 +277,149 @@ static int r_ins_or_label(reader_t *is, as_ins_t *ins) {
   return 1;
 }
 
+static void r_dir_byte(parser_t *ps) {
+  reader_t *is = &(ps->is);
+  oc8_as_sfile_t *sf = ps->sf;
+  skip_ws(is, /*skip_nl=*/0);
+
+  unsigned val = r_imm(is, NULL);
+  if (val > 0xFF)
+    reader_error(is, "directive byte: value must be <= 0xFF");
+  oc8_as_sfile_dir_byte(sf, val);
+}
+
+static void r_dir_equ(parser_t *ps) {
+  reader_t *is = &(ps->is);
+  oc8_as_sfile_t *sf = ps->sf;
+  skip_ws(is, /*skip_nl=*/0);
+
+  char name[OC8_MAX_SYM_SIZE + 1];
+  r_id(is, name, OC8_MAX_SYM_SIZE, "directive equ: invalid identifier");
+
+  skip_ws(is, /*skip_nl=*/0);
+  if (reader_getc(is) != ',')
+    reader_error(is, "directive equ: expected ',' after identifier");
+  skip_ws(is, /*skip_nl=*/0);
+
+  unsigned val = r_imm(is, NULL);
+  if (val > 0xFFF)
+    reader_error(is, "directive equ: value must be <= 0xFFF");
+  oc8_as_sfile_dir_equ(sf, name, val);
+}
+
+static void r_dir_globl(parser_t *ps) {
+  reader_t *is = &(ps->is);
+  oc8_as_sfile_t *sf = ps->sf;
+  skip_ws(is, /*skip_nl=*/0);
+
+  char sym[OC8_MAX_SYM_SIZE + 1];
+  r_id(is, sym, OC8_MAX_SYM_SIZE, "directive globl: invalid symbol");
+  oc8_as_sfile_dir_globl(sf, sym);
+}
+
+static void r_dir_size(parser_t *ps) {
+  reader_t *is = &(ps->is);
+  oc8_as_sfile_t *sf = ps->sf;
+  skip_ws(is, /*skip_nl=*/0);
+
+  char sym[OC8_MAX_SYM_SIZE + 1];
+  r_id(is, sym, OC8_MAX_SYM_SIZE, "directive size: invalid symbol");
+
+  skip_ws(is, /*skip_nl=*/0);
+  if (reader_getc(is) != ',')
+    reader_error(is, "directive size: expected ',' after symbol");
+  skip_ws(is, /*skip_nl=*/0);
+
+  unsigned val = r_imm(is, NULL);
+  if (val > 0xFFF)
+    reader_error(is, "directive size: value must be <= 0xFFF");
+  oc8_as_sfile_dir_size(sf, sym, val);
+}
+
+static void r_dir_type(parser_t *ps) {
+  reader_t *is = &(ps->is);
+  oc8_as_sfile_t *sf = ps->sf;
+  skip_ws(is, /*skip_nl=*/0);
+
+  char sym[OC8_MAX_SYM_SIZE + 1];
+  r_id(is, sym, OC8_MAX_SYM_SIZE, "directive type: invalid symbol");
+
+  skip_ws(is, /*skip_nl=*/0);
+  if (reader_getc(is) != ',')
+    reader_error(is, "directive type: expected ',' after symbol");
+  skip_ws(is, /*skip_nl=*/0);
+
+  if (reader_getc(is) != '@')
+    reader_error(is, "directive type: expected '@' before typename");
+
+  char stype[12];
+  r_id(is, stype, sizeof(stype) - 1, "directive type: invalid typename");
+  oc8_as_sym_type_t type;
+  if (strcmp(stype, "function") == 0)
+    type = OC8_AS_DATA_SYM_TYPE_FUN;
+  else if (strcmp(stype, "object") == 0)
+    type = OC8_AS_DATA_SYM_TYPE_OBJ;
+  else
+    reader_error(is, "directive type: unknown typename");
+
+  oc8_as_sfile_dir_type(sf, sym, type);
+}
+
+static void r_dir_word(parser_t *ps) {
+  reader_t *is = &(ps->is);
+  oc8_as_sfile_t *sf = ps->sf;
+  skip_ws(is, /*skip_nl=*/0);
+
+  unsigned val = r_imm(is, NULL);
+  if (val > 0xFFFF)
+    reader_error(is, "directive word: value must be <= 0xFFFF");
+  oc8_as_sfile_dir_word(sf, val);
+}
+
+static void r_dir_zero(parser_t *ps) {
+  reader_t *is = &(ps->is);
+  oc8_as_sfile_t *sf = ps->sf;
+  skip_ws(is, /*skip_nl=*/0);
+
+  unsigned val = r_imm(is, NULL);
+  if (val > 0xFFF)
+    reader_error(is, "directive zero: value must be <= 0xFFF");
+  oc8_as_sfile_dir_zero(sf, val);
+}
+
+// parse a directive
+static void r_dir(parser_t *ps) {
+  reader_t *is = &(ps->is);
+  if (reader_getc(is) != '.')
+    reader_error(is, "Internal parser error: expected directive");
+
+  char name[MAX_DIR_NAME_LEN + 1];
+  r_id(is, name, MAX_DIR_NAME_LEN, "Invalid directive name");
+
+  if (strcmp(name, "byte") == 0)
+    r_dir_byte(ps);
+  else if (strcmp(name, "equ") == 0)
+    r_dir_equ(ps);
+  else if (strcmp(name, "globl") == 0)
+    r_dir_globl(ps);
+  else if (strcmp(name, "size") == 0)
+    r_dir_size(ps);
+  else if (strcmp(name, "type") == 0)
+    r_dir_type(ps);
+  else if (strcmp(name, "word") == 0)
+    r_dir_word(ps);
+  else if (strcmp(name, "zero") == 0)
+    r_dir_zero(ps);
+  else
+    reader_error(is, "Unknown directive name");
+
+  skip_ws(is, /*skip_nl=*/0);
+  int c = reader_peekc(is);
+  int dir_end = c == EOF || c == '\n' || c == '#';
+  if (!dir_end)
+    reader_error(is, "Invalid char after end of directive");
+}
+
 static void r_comment(reader_t *is) {
   if (reader_getc(is) != '#')
     reader_error(is, "Internal error: r_comment expected start with '#'");
@@ -273,11 +430,6 @@ static void r_comment(reader_t *is) {
       break;
   }
 }
-
-typedef struct {
-  reader_t is;
-  oc8_as_sfile_t *sf;
-} parser_t;
 
 static int is_op_vreg(op_t *op) {
   return op->type == OP_TYPE_REG && op->val_reg[0] == 'v' &&
@@ -740,9 +892,8 @@ static int r_decl(parser_t *ps) {
 
   // parse directive
   if (c == '.') {
-    reader_error(&ps->is, "directive not implemented yet");
+    r_dir(ps);
     return 1;
-    // @TODO Parse directives
   }
 
   // parse instruction or label

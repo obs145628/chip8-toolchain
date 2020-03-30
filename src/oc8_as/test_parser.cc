@@ -27,7 +27,6 @@ std::string trim(const std::string &str) {
   return std::string(str.begin() + bpos, str.begin() + epos + 1);
 }
 
-#if 0
 std::vector<std::string> split(const std::string &str, char sep) {
   std::vector<std::string> res;
   std::istringstream is(str);
@@ -36,7 +35,6 @@ std::vector<std::string> split(const std::string &str, char sep) {
     res.push_back(val);
   return res;
 }
-#endif
 
 std::string print_short(oc8_as_sfile_t *sf) {
   char buff[512];
@@ -262,129 +260,113 @@ TEST_CASE("parse ins 8XY3", "") {
   oc8_as_sfile_free(sf);
 }
 
-#if 0
-
-TEST_CASE("sfile dir byte", "") {
-  oc8_as_sfile_t *sf = oc8_as_sfile_new();
-  oc8_as_sfile_dir_byte(sf, 0xF6);
+TEST_CASE("parse dir byte", "") {
+  oc8_as_sfile_t *sf = parse_str(".byte 0xF6");
   REQUIRE(trim(print_short(sf)) == ".byte 0xF6");
   oc8_as_sfile_free(sf);
 }
 
-TEST_CASE("sfile dir word", "") {
-  oc8_as_sfile_t *sf = oc8_as_sfile_new();
-  oc8_as_sfile_dir_word(sf, 0xF6C4);
+TEST_CASE("parse dir word", "") {
+  oc8_as_sfile_t *sf = parse_str(".word 0xF6C4");
   REQUIRE(trim(print_short(sf)) == ".word 0xF6C4");
   oc8_as_sfile_free(sf);
 }
 
-TEST_CASE("sfile dir zero", "") {
-  oc8_as_sfile_t *sf = oc8_as_sfile_new();
-  oc8_as_sfile_dir_zero(sf, 38);
+TEST_CASE("parse dir zero", "") {
+  oc8_as_sfile_t *sf = parse_str(".zero 38");
   REQUIRE(trim(print_short(sf)) == ".zero 38");
   oc8_as_sfile_free(sf);
 }
 
-TEST_CASE("sfile sins 7XNN", "") {
-  oc8_as_sfile_t *sf = oc8_as_sfile_new();
-  oc8_as_sfile_sins_add_imm(sf, "foo", 0xB);
+TEST_CASE("parse sins 7XNN", "") {
+  oc8_as_sfile_t *sf = parse_str("add foo, %vb");
   REQUIRE(trim(print_short(sf)) == "add foo, %vb");
   oc8_as_sfile_free(sf);
 }
 
-TEST_CASE("sfile sins 2NNN", "") {
-  oc8_as_sfile_t *sf = oc8_as_sfile_new();
-  oc8_as_sfile_sins_call(sf, "foo");
+TEST_CASE("parse sins 2NNN", "") {
+  oc8_as_sfile_t *sf = parse_str("call foo");
   REQUIRE(trim(print_short(sf)) == "call foo");
   oc8_as_sfile_free(sf);
 }
 
-TEST_CASE("sfile sins DXYN", "") {
-  oc8_as_sfile_t *sf = oc8_as_sfile_new();
-  oc8_as_sfile_sins_draw(sf, 0xE, 0x6, "foo");
+TEST_CASE("parse sins DXYN", "") {
+  oc8_as_sfile_t *sf = parse_str("draw %ve, %v6, foo");
   REQUIRE(trim(print_short(sf)) == "draw %ve, %v6, foo");
   oc8_as_sfile_free(sf);
 }
 
-TEST_CASE("sfile sins 1NNN", "") {
-  oc8_as_sfile_t *sf = oc8_as_sfile_new();
-  oc8_as_sfile_sins_jmp(sf, "foo");
-  REQUIRE(trim(print_short(sf)) == "jmp foo");
+TEST_CASE("parse sins 1NNN", "") {
+  oc8_as_sfile_t *sf = parse_str("jmp bar");
+  REQUIRE(trim(print_short(sf)) == "jmp bar");
   oc8_as_sfile_free(sf);
 }
 
-TEST_CASE("sfile sins BNNN", "") {
-  oc8_as_sfile_t *sf = oc8_as_sfile_new();
-  oc8_as_sfile_sins_jmp_v0(sf, "foo");
+TEST_CASE("parse sins BNNN", "") {
+  oc8_as_sfile_t *sf = parse_str("jmp foo(%v0)");
   REQUIRE(trim(print_short(sf)) == "jmp foo(%v0)");
   oc8_as_sfile_free(sf);
 }
 
-TEST_CASE("sfile sins 6XNN", "") {
-  oc8_as_sfile_t *sf = oc8_as_sfile_new();
-  oc8_as_sfile_sins_mov_imm(sf, "foo", 0xC);
+TEST_CASE("parse sins 6XNN", "") {
+  oc8_as_sfile_t *sf = parse_str("mov foo, %vc");
   REQUIRE(trim(print_short(sf)) == "mov foo, %vc");
   oc8_as_sfile_free(sf);
 }
 
-TEST_CASE("sfile sins ANNN", "") {
-  oc8_as_sfile_t *sf = oc8_as_sfile_new();
-  oc8_as_sfile_sins_mov_i(sf, "foo");
+TEST_CASE("parse sins ANNN", "") {
+  oc8_as_sfile_t *sf = parse_str("mov foo, %i");
   REQUIRE(trim(print_short(sf)) == "mov foo, %i");
   oc8_as_sfile_free(sf);
 }
 
-TEST_CASE("sfile sins CXNN", "") {
-  oc8_as_sfile_t *sf = oc8_as_sfile_new();
-  oc8_as_sfile_sins_rand(sf, "bar", 0x7);
+TEST_CASE("parse sins CXNN", "") {
+  oc8_as_sfile_t *sf = parse_str("rand bar, %v7");
   REQUIRE(trim(print_short(sf)) == "rand bar, %v7");
   oc8_as_sfile_free(sf);
 }
 
-TEST_CASE("sfile sins 3XNN", "") {
-  oc8_as_sfile_t *sf = oc8_as_sfile_new();
-  oc8_as_sfile_sins_skpe_imm(sf, "foo", 0xE);
+TEST_CASE("parse sins 3XNN", "") {
+  oc8_as_sfile_t *sf = parse_str("skpe foo, %ve");
   REQUIRE(trim(print_short(sf)) == "skpe foo, %ve");
   oc8_as_sfile_free(sf);
 }
 
-TEST_CASE("sfile sins 4XNN", "") {
-  oc8_as_sfile_t *sf = oc8_as_sfile_new();
-  oc8_as_sfile_sins_skpn_imm(sf, "foo", 0xE);
+TEST_CASE("parse sins 4XNN", "") {
+  oc8_as_sfile_t *sf = parse_str("skpn foo, %ve");
   REQUIRE(trim(print_short(sf)) == "skpn foo, %ve");
   oc8_as_sfile_free(sf);
 }
 
-TEST_CASE("sfile sins 0NNN", "") {
-  oc8_as_sfile_t *sf = oc8_as_sfile_new();
-  oc8_as_sfile_sins_sys(sf, "__syscall");
+TEST_CASE("parse sins 0NNN", "") {
+  oc8_as_sfile_t *sf = parse_str("sys __syscall");
   REQUIRE(trim(print_short(sf)) == "sys __syscall");
   oc8_as_sfile_free(sf);
 }
 
-TEST_CASE("sfile simple label", "") {
-  oc8_as_sfile_t *sf = oc8_as_sfile_new();
-  oc8_as_sfile_ins_cls(sf);
-  oc8_as_sfile_add_sym(sf, "foo");
-  oc8_as_sfile_ins_ret(sf);
+TEST_CASE("parse simple label", "") {
+  oc8_as_sfile_t *sf = parse_str("  cls\n"
+                                 "foo:\n"
+                                 "ret\n");
   auto code = split(trim(print_short(sf)), '\n');
 
+  REQUIRE(code.size() == 3);
   REQUIRE(trim(code[0]) == "cls");
   REQUIRE(trim(code[1]) == "foo:");
   REQUIRE(trim(code[2]) == "ret");
   oc8_as_sfile_free(sf);
 }
 
-TEST_CASE("sfile infos label", "") {
-  oc8_as_sfile_t *sf = oc8_as_sfile_new();
-  oc8_as_sfile_dir_globl(sf, "foo");
-  oc8_as_sfile_ins_cls(sf);
-  oc8_as_sfile_dir_size(sf, "foo", 8);
-  oc8_as_sfile_add_sym(sf, "foo");
-  oc8_as_sfile_ins_ret(sf);
-  oc8_as_sfile_dir_type(sf, "foo", OC8_AS_DATA_SYM_TYPE_FUN);
+TEST_CASE("parse infos label", "") {
+  oc8_as_sfile_t *sf = parse_str("  .globl foo\n"
+                                 "  cls\n"
+                                 "  .size foo, 8\n"
+                                 "foo:\n"
+                                 "  ret\n"
+                                 "  .type foo, @function\n");
   auto code = split(trim(print_short(sf)), '\n');
 
+  REQUIRE(code.size() == 6);
   REQUIRE(trim(code[0]) == "cls");
   REQUIRE(trim(code[1]) == ".size foo, 8");
   REQUIRE(trim(code[2]) == ".type foo, @function");
@@ -394,36 +376,42 @@ TEST_CASE("sfile infos label", "") {
   oc8_as_sfile_free(sf);
 }
 
-TEST_CASE("sfile addr values", "") {
-  oc8_as_sfile_t *sf = oc8_as_sfile_new();
-  REQUIRE(sf->curr_addr == 0);
+TEST_CASE("parse function fibo", "") {
+  oc8_as_sfile_t *sf = parse_str("  .globl fibo\n"
+                                 "  .type fibo, @function\n"
+                                 "fibo:\n"
+                                 "  mov 0, %v1\n"
+                                 "  mov 1, %v2\n"
+                                 "\n"
+                                 "L0:\n"
+                                 "  skpn 0, %v0\n"
+                                 "  jmp L1\n"
+                                 "  mov %v2, %v3\n"
+                                 "  add %v1, %v2\n"
+                                 "  mov %v3, %v1\n"
+                                 "  add 0xFF, %v0\n"
+                                 "  jmp L0\n"
+                                 "\n"
+                                 "L1:\n"
+                                 "mov %v1, %v0\n"
+                                 "ret\n");
+  auto code = split(trim(print_short(sf)), '\n');
 
-  oc8_as_sfile_dir_align(sf, 0x2);
-  REQUIRE(sf->curr_addr == 0);
-  oc8_as_sfile_dir_byte(sf, 0);
-  REQUIRE(sf->curr_addr == 1);
-  oc8_as_sfile_dir_align(sf, 0x2);
-  REQUIRE(sf->curr_addr == 2);
-  oc8_as_sfile_dir_align(sf, 0x2);
-  REQUIRE(sf->curr_addr == 2);
-
-  oc8_as_sfile_dir_align(sf, 0x4);
-  REQUIRE(sf->curr_addr == 4);
-  oc8_as_sfile_dir_byte(sf, 0);
-  REQUIRE(sf->curr_addr == 5);
-  oc8_as_sfile_dir_align(sf, 0x4);
-  REQUIRE(sf->curr_addr == 8);
-  oc8_as_sfile_dir_align(sf, 0x4);
-  REQUIRE(sf->curr_addr == 8);
-
-  oc8_as_sfile_dir_word(sf, 0);
-  REQUIRE(sf->curr_addr == 10);
-  oc8_as_sfile_dir_align(sf, 0x4);
-  REQUIRE(sf->curr_addr == 12);
-  oc8_as_sfile_ins_cls(sf);
-  REQUIRE(sf->curr_addr == 14);
-
-  oc8_as_sfile_free(sf);
+  REQUIRE(code.size() == 16);
+  REQUIRE(trim(code[0]) == ".type fibo, @function");
+  REQUIRE(trim(code[1]) == ".globl fibo");
+  REQUIRE(trim(code[2]) == "fibo:");
+  REQUIRE(trim(code[3]) == "mov 0x0, %v1");
+  REQUIRE(trim(code[4]) == "mov 0x1, %v2");
+  REQUIRE(trim(code[5]) == "L0:");
+  REQUIRE(trim(code[6]) == "skpn 0x0, %v0");
+  REQUIRE(trim(code[7]) == "jmp L1");
+  REQUIRE(trim(code[8]) == "mov %v2, %v3");
+  REQUIRE(trim(code[9]) == "add %v1, %v2");
+  REQUIRE(trim(code[10]) == "mov %v3, %v1");
+  REQUIRE(trim(code[11]) == "add 0xFF, %v0");
+  REQUIRE(trim(code[12]) == "jmp L0");
+  REQUIRE(trim(code[13]) == "L1:");
+  REQUIRE(trim(code[14]) == "mov %v1, %v0");
+  REQUIRE(trim(code[15]) == "ret");
 }
-
-#endif

@@ -168,9 +168,25 @@ file: <declaration>*
 declaration: \s* (<ins> | <dir> | <comment> | <symbol>)
 
 
-in: @id \s+ @list<<op>, ','>
+ins: @id \s+ @list<<op>, ','>
 
-dir: '.' @id \s+ @list<@id, ','>
+dir: '.' @id \s+ (dir_align | dir_byte | dir_equ | dir_globl
+     	     	 	    | dir_size | dir_type | dir_word | dir_zero)
+
+
+dir_byte: \s+ op_imm // (without symbol)
+
+dir_equ: \s+ @id \s? , \s? op_imm // (without symbol)
+
+dir_globl: \s+ @id
+
+dir_size: \s+ @id \s? , \s? op_imm // (without symbol)
+
+dir_type: \s+ @id \s? , \s? '@' ('function' | 'object')
+
+dir_word: \s+ op_imm // (without symbol)
+
+dir_zero: \s+ op_imm // (without symbol)
 
 comment: '#' .* '\n'
 
