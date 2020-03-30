@@ -24,8 +24,6 @@
 extern "C" {
 #endif
 
-// @TODO
-
 /// Parse an input stream to build an sfile
 /// User is reponsible for deallocating the sfile and `is`
 /// @param is_name name given to the stream for better error messages. optional
