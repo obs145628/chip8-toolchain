@@ -494,4 +494,5 @@ TEST_CASE("sfile function fibo", "") {
   REQUIRE(trim(code[13]) == "L1:");
   REQUIRE(trim(code[14]) == "mov %v1, %v0");
   REQUIRE(trim(code[15]) == "ret");
+  oc8_as_sfile_free(sf);
 }

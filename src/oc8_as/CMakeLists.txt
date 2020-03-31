@@ -12,6 +12,7 @@ set(TEST_SRC
   test_parser.cc
   test_sfile.cc
   test_stream.cc
+  ${CMAKE_SOURCE_DIR}/tests/test_src.c
 )
 set(TEST_NAME utest_oc8as.bin)
 add_executable(${TEST_NAME} ${TEST_SRC})

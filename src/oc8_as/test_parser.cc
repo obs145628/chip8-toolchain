@@ -7,6 +7,8 @@
 #include "oc8_as/printer.h"
 #include "oc8_as/sfile.h"
 
+#include "../../tests/test_src.h"
+
 namespace {
 
 bool is_wspace(char c) {
@@ -377,24 +379,7 @@ TEST_CASE("parse infos label", "") {
 }
 
 TEST_CASE("parse function fibo", "") {
-  oc8_as_sfile_t *sf = parse_str("  .globl fibo\n"
-                                 "  .type fibo, @function\n"
-                                 "fibo:\n"
-                                 "  mov 0, %v1\n"
-                                 "  mov 1, %v2\n"
-                                 "\n"
-                                 "L0:\n"
-                                 "  skpn 0, %v0\n"
-                                 "  jmp L1\n"
-                                 "  mov %v2, %v3\n"
-                                 "  add %v1, %v2\n"
-                                 "  mov %v3, %v1\n"
-                                 "  add 0xFF, %v0\n"
-                                 "  jmp L0\n"
-                                 "\n"
-                                 "L1:\n"
-                                 "mov %v1, %v0\n"
-                                 "ret\n");
+  oc8_as_sfile_t *sf = parse_str(test_fibo_src);
   auto code = split(trim(print_short(sf)), '\n');
 
   REQUIRE(code.size() == 16);
@@ -414,4 +399,102 @@ TEST_CASE("parse function fibo", "") {
   REQUIRE(trim(code[13]) == "L1:");
   REQUIRE(trim(code[14]) == "mov %v1, %v0");
   REQUIRE(trim(code[15]) == "ret");
+  oc8_as_sfile_free(sf);
+}
+
+TEST_CASE("parse function my_add", "") {
+  oc8_as_sfile_t *sf = parse_str(test_my_add_src);
+  auto code = split(trim(print_short(sf)), '\n');
+
+  REQUIRE(code.size() == 5);
+  REQUIRE(trim(code[0]) == ".type my_add, @function");
+  REQUIRE(trim(code[1]) == ".globl my_add");
+  REQUIRE(trim(code[2]) == "my_add:");
+  REQUIRE(trim(code[3]) == "add %v1, %v0");
+  REQUIRE(trim(code[4]) == "ret");
+  oc8_as_sfile_free(sf);
+}
+
+TEST_CASE("parse function sum_rec", "") {
+  oc8_as_sfile_t *sf = parse_str(test_sum_rec_src);
+  auto code = split(trim(print_short(sf)), '\n');
+
+  REQUIRE(code.size() == 10);
+  REQUIRE(trim(code[0]) == ".type sum_rec, @function");
+  REQUIRE(trim(code[1]) == ".globl sum_rec");
+  REQUIRE(trim(code[2]) == "sum_rec:");
+  REQUIRE(trim(code[3]) == "skpe 0x0, %v0");
+  REQUIRE(trim(code[4]) == "ret");
+  REQUIRE(trim(code[5]) == "mov %v0, %v4");
+  REQUIRE(trim(code[6]) == "add 0x1, %v0");
+  REQUIRE(trim(code[7]) == "call sum_rec");
+  REQUIRE(trim(code[8]) == "add %v4, %v0");
+  REQUIRE(trim(code[9]) == "ret");
+  oc8_as_sfile_free(sf);
+}
+
+TEST_CASE("parse file call_add", "") {
+  oc8_as_sfile_t *sf = parse_str(test_call_add_src);
+  auto code = split(trim(print_short(sf)), '\n');
+
+  REQUIRE(code.size() == 5);
+  REQUIRE(trim(code[0]) == "_start:");
+  REQUIRE(trim(code[1]) == "mov 0x6, %v0");
+  REQUIRE(trim(code[2]) == "mov 0x8, %v1");
+  REQUIRE(trim(code[3]) == "call my_add");
+  REQUIRE(trim(code[4]) == "mov %v0, %vf");
+  oc8_as_sfile_free(sf);
+}
+
+TEST_CASE("parse file call_add_mem", "") {
+  oc8_as_sfile_t *sf = parse_str(test_call_add_mem_src);
+  auto code = split(trim(print_short(sf)), '\n');
+
+  REQUIRE(code.size() == 10);
+  REQUIRE(trim(code[0]) == ".type _start, @function");
+  REQUIRE(trim(code[1]) == "_start:");
+  REQUIRE(trim(code[2]) == "mov args, %i");
+  REQUIRE(trim(code[3]) == "movm %i, %v1");
+  REQUIRE(trim(code[4]) == "call my_add");
+  REQUIRE(trim(code[5]) == "mov %v0, %vf");
+  REQUIRE(trim(code[6]) == ".type args, @object");
+  REQUIRE(trim(code[7]) == "args:");
+  REQUIRE(trim(code[8]) == ".byte 0x8");
+  REQUIRE(trim(code[9]) == ".byte 0xD");
+  oc8_as_sfile_free(sf);
+}
+
+TEST_CASE("parse file fact_table_src", "") {
+  oc8_as_sfile_t *sf = parse_str(test_fact_table_src);
+  auto code = split(trim(print_short(sf)), '\n');
+
+  REQUIRE(code.size() == 27);
+  REQUIRE(trim(code[0]) == ".type fact, @function");
+  REQUIRE(trim(code[1]) == ".globl fact");
+  REQUIRE(trim(code[2]) == "fact:");
+  REQUIRE(trim(code[3]) == "mov %v0, %v1");
+  REQUIRE(trim(code[4]) == "add 0x2, %v1");
+  REQUIRE(trim(code[5]) == "mov 0xF8, %v2");
+  REQUIRE(trim(code[6]) == "and %v2, %v1");
+  REQUIRE(trim(code[7]) == "skpn 0x0, %v1");
+  REQUIRE(trim(code[8]) == "jmp Ltable");
+  REQUIRE(trim(code[9]) == "Lmax:");
+  REQUIRE(trim(code[10]) == "mov 0xFF, %v0");
+  REQUIRE(trim(code[11]) == "jmp Lend");
+  REQUIRE(trim(code[12]) == "Ltable:");
+  REQUIRE(trim(code[13]) == "mov table, %i");
+  REQUIRE(trim(code[14]) == "add %v0, %i");
+  REQUIRE(trim(code[15]) == "movm %i, %v0");
+  REQUIRE(trim(code[16]) == "Lend:");
+  REQUIRE(trim(code[17]) == "ret");
+  REQUIRE(trim(code[18]) == ".type table, @object");
+  REQUIRE(trim(code[19]) == "table:");
+  REQUIRE(trim(code[20]) == ".byte 0x1");
+  REQUIRE(trim(code[21]) == ".byte 0x1");
+  REQUIRE(trim(code[22]) == ".byte 0x2");
+  REQUIRE(trim(code[23]) == ".byte 0x3");
+  REQUIRE(trim(code[24]) == ".byte 0x6");
+  REQUIRE(trim(code[25]) == ".byte 0x18");
+  REQUIRE(trim(code[26]) == ".byte 0x78");
+  oc8_as_sfile_free(sf);
 }

@@ -1,5 +1,8 @@
 set(SRC
+  bin_reader.c
+  bin_writer.c
   file.c
+  format.c
 )
 add_library(oc8_bin ${SRC})
 #target_link_libraries(oc8_as oc8_is oc8_smap)
