@@ -128,7 +128,7 @@ uint16_t oc8_bin_file_add_def(oc8_bin_file_t *bf, const char *name,
     }
     def->name[i++] = c;
   }
-  if (i < OC8_MAX_SYM_SIZE) {
+  if (i >= OC8_MAX_SYM_SIZE) {
     fprintf(stderr, "bin_file_check: add_def: symbol name too long\n");
     PANIC();
   }
@@ -138,8 +138,9 @@ uint16_t oc8_bin_file_add_def(oc8_bin_file_t *bf, const char *name,
   if (type < OC8_BIN_SYM_TYPE_FUN || type > OC8_BIN_SYM_TYPE_NO) {
     fprintf(stderr, "bin_file_check: add_def: invalid type: %u.\n",
             (unsigned)type);
-    def->type = type;
+    PANIC();
   }
+  def->type = type;
 
   def->addr = addr;
 

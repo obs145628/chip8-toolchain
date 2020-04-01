@@ -14,6 +14,10 @@
 ///
 //===----------------------------------------------------------------------===//
 
+#include "as.h"
+#include "parser.h"
+#include "printer.h"
+#include "sfile.h"
 #include "stream.h"
 
 #endif // !OC8_AS_OC8_AS_H_

@@ -16,8 +16,8 @@ const char *test_fibo_src = "  .globl fibo\n"
                             "  jmp L0\n"
                             "\n"
                             "L1:\n"
-                            "mov %v1, %v0\n"
-                            "ret\n";
+                            "  mov %v1, %v0\n"
+                            "  ret\n";
 
 const char *test_my_add_src = "  .globl my_add\n"
                               "  .type my_add, @function\n"

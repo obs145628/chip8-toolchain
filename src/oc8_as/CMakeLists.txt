@@ -1,14 +1,16 @@
 set(SRC
+  as.c
   parser.c
   printer.c
   sfile.c
   stream.c
 )
 add_library(oc8_as ${SRC})
-target_link_libraries(oc8_as oc8_is oc8_smap)
+target_link_libraries(oc8_as oc8_bin oc8_is oc8_smap)
 
 set(TEST_SRC
   test_main.cc
+  test_as.cc
   test_parser.cc
   test_sfile.cc
   test_stream.cc
