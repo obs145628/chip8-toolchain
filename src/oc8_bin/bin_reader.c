@@ -51,6 +51,8 @@ void oc8_bin_read_file_raw(oc8_bin_file_t *f, const void *in_buf,
     PANIC();
   }
 
+  oc8_bin_file_set_defs_count(f, nb_defs);
+
   const oc8_bin_raw_sym_def_t *defs = (const oc8_bin_raw_sym_def_t *)&header[1];
   const oc8_bin_raw_sym_ref_t *refs =
       (const oc8_bin_raw_sym_ref_t *)&defs[nb_defs];

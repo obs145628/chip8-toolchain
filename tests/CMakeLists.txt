@@ -6,3 +6,8 @@ add_custom_target(check
   --out ${CMAKE_BINARY_DIR}/obts
   DEPENDS build-tests  
 )
+
+add_custom_target(todo
+  COMMAND
+  /home/obs/lun/obdev/bin/obdev todo ${CMAKE_SOURCE_DIR}
+)

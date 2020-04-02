@@ -3,6 +3,7 @@
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "oc8_defs/oc8_defs.h"
 
@@ -119,6 +120,7 @@ uint16_t oc8_bin_file_add_def(oc8_bin_file_t *bf, const char *name,
   uint16_t id = bf->syms_defs_size++;
   oc8_bin_sym_def_t *def = &bf->syms_defs[id];
 
+  memset(&def->name[0], 0, sizeof(def->name));
   int i = 0;
   while (i < OC8_MAX_SYM_SIZE && name[i]) {
     char c = name[i];

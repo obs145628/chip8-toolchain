@@ -19,6 +19,8 @@ GUI with SDL, no sound.
 
 ## oc8-as
 
+Usage: ./oc8-emu <input-file> [-o <output-file>]
+
 TODO  
 Compile an assembly text file (.c8s) into object file (.c8o)
 
@@ -73,8 +75,6 @@ Represent binary data (.c8o and .c8bin files)
 - BinReader: Read binary `.c8o` / `.c8bin` file and build bin_file struct
 - BinWriter: Write binary `.c8o` / `.c8bin` file from bin_file struct
 - Printer: Generate human-readable string from bin_file struct.
-
-TODO: write tests for reader / writer
 
 # oc8_ld: (oc8_bin)
 

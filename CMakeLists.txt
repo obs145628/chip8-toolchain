@@ -16,6 +16,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 add_subdirectory(tests)
 
+add_subdirectory(src/apps/oc8-as)
 add_subdirectory(src/apps/oc8-emu)
 
 add_subdirectory(src/oc8_as)
