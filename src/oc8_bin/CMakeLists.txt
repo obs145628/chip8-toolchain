@@ -5,6 +5,7 @@ set(SRC
   format.c
 )
 add_library(oc8_bin ${SRC})
+target_link_libraries(oc8_bin oc8_smap)
 
 set(TEST_SRC
   test_main.cc
