@@ -1,0 +1,31 @@
+  .globl fact
+  .type fact, @function
+fact:
+  mov %v0, %v1
+  add 0x2, %v1
+  mov 0xf8, %v2
+  and %v2, %v1
+  skpn 0, %v1
+  jmp Ltable
+                                  
+Lmax:
+  mov 0xff, %v0
+  jmp Lend
+                                  
+Ltable:
+  mov table, %i
+  add %v0, %i
+  movm %i, %v0
+                                  
+Lend:
+  ret
+                                  
+  .type table, @object
+table:
+  .byte 0x1
+  .byte 0x1
+  .byte 0x2
+  .byte 0x3
+  .byte 0x6
+  .byte 0x18
+  .byte 0x78

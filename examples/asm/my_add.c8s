@@ -1,0 +1,5 @@
+  .globl my_add
+  .type my_add, @function
+my_add:
+  add %v1, %v0
+  ret

@@ -1,0 +1,10 @@
+  .globl sum_rec
+  .type sum_rec, @function
+sum_rec:
+  skpe 0, %v0
+  ret
+  mov %v0, %v4
+  add 1, %v0
+  call sum_rec
+  add %v4, %v0
+  ret

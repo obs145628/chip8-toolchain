@@ -1,0 +1,5 @@
+_start:
+  mov 6, %v0
+  mov 8, %v1
+  call my_add
+  mov %v0, %vf

@@ -1,0 +1,11 @@
+  .type _start, @function
+ _start:
+  mov args, %i
+  movm %i, %v1
+  call my_add
+  mov %v0, %vf
+                                    
+  .type args, @object
+args:
+  .byte 8
+  .byte 13
