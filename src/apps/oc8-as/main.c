@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "args-parser.h"
+#include "args_parser/args_parser.h"
 #include "oc8_as/as.h"
 #include "oc8_as/parser.h"
 #include "oc8_as/sfile.h"
