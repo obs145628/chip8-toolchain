@@ -1,0 +1,13 @@
+- use obdev as a git submodule
+- implement oc8_ld lib
+- implement human-readable printer for oc8_bin
+- finish and check oc8-bin2rom binary
+- fnish and check oc8-rom2bin binary
+- oc8-ld binary
+- oc8-objdump binary
+
+- write debugger libary odb
+- Make oc8_emu compatible with odb
+- Make LanExpr compiler build as_sfile structs
+- Implememt web GUI frontend for odb
+- x64 JIT for oc8_emu

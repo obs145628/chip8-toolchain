@@ -19,9 +19,8 @@ GUI with SDL, no sound.
 
 ## oc8-as
 
-Usage: ./oc8-emu <input-file> [-o <output-file>]
+Usage: ./oc8-emu <input-file> [-o <output-file>].  
 
-TODO  
 Compile an assembly text file (.c8s) into object file (.c8o)
 
 ## oc8-objdump
@@ -48,17 +47,17 @@ to save it to a binary file (.c8bin)
 
 # Libraries
 
-# oc8_is
+## oc8_is
 
 - Encoder: encode ins to binary from ins struct
 - Decoder: decode ins to ins struct from binary
 
-# oc8_emu
+## oc8_emu
 
 Emulate the CHIP-8 CPU and run instructions.  
 Dependencies: `oc8_is`
 
-# oc8_as
+## oc8_as
 
 Represent assembly code
 
@@ -70,25 +69,33 @@ that can be parsed again with the reader.
 
 Dependencies: `oc8_bin`, `oc8_is`, `oc8_smap`
 
-# oc8_bin
+## oc8_bin
 
 Represent binary data (.c8o and .c8bin files)
 
 - API to build bin_file struct
 - BinReader: Read binary `.c8o` / `.c8bin` file and build `bin_file` struct
 - BinWriter: Write binary `.c8o` / `.c8bin` file from `bin_file` struct
-- Printer: Generate human-readable string from `bin_file` struct.
+- Printer: Generate human-readable string from `bin_file` struct. (TODO)
 
-# oc8_ld
+Dependencies: `oc8_smap`
+
+## oc8_ld
 
 TODO.  
-Take many object bin_file structs, and combine them in one runnable bin_file struct.  
+Take many object `bin_file` structs, and combine them in one runnable `bin_file` struct.  
 Dependencies: `oc8_bin`
 
-# oc8_smap
+## Other util libraries
+
+### args_parser
+
+Really basic arguments parsers for CLI programs.  
+Used by most of the binaries of this projects
+
+### oc8_smap
 
 Basic implementation of a `map<string, size_t>`.  
 Implementation based on linkled lists, will try to do best later.  
 Used by many libraries that need symbol tables.  
 The val `size_t` can store any number or pointer.  
-
