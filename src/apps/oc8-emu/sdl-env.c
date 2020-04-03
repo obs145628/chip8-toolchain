@@ -42,8 +42,6 @@ void sdl_env_exit() {
 }
 
 int sdl_env_update() {
-
-  // @TODO
   int quit = 0;
 
   SDL_Event e;

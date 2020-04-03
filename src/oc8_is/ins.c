@@ -23,7 +23,7 @@ int oc8_is_decode_ins(oc8_is_ins_t *ins, const char *buf) {
   ins->opcode = opcode;
 
   // instructions opcodes stored in big endian, must be swapped for LE systems.
-  // @TODO add conditions to not swap for BE systems
+  // @EXTRA add conditions to not swap for BE systems
   opcode = OPCODE_SWAP(opcode);
 
   // opcodes starting by 0
@@ -256,7 +256,6 @@ int oc8_is_encode_ins(oc8_is_ins_t *ins, char *buf) {
   uint16_t opcode;
 
   switch (ins->type) {
-    // @TODO encode all instructions
   case OC8_IS_TYPE_0NNN:
     opcode = ins->operands[0];
     break;

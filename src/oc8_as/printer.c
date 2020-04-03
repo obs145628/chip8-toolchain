@@ -87,8 +87,6 @@ static void write_symbol_def(printer_t *printer) {
   char buf[OC8_MAX_SYM_SIZE + 32];
 
   oc8_as_sym_def_t *def = &printer->sf->syms_defs_arr[printer->next_def_idx];
-  // @TODO cannot write symbols too long
-  assert(strlen(def->name) < 32);
 
   if (def->size != 0) { //.size <name>, <size>
     sprintf(buf, ".size %s, %u\n", def->name, (unsigned)def->size);

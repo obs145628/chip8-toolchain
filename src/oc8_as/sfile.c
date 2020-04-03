@@ -1,4 +1,5 @@
 #include "oc8_as/sfile.h"
+#include "oc8_defs/debug.h"
 #include "oc8_defs/oc8_defs.h"
 
 #include <assert.h>
@@ -100,7 +101,7 @@ void oc8_as_sfile_check(oc8_as_sfile_t *as) {
   // - empty file
   if (as->curr_addr == 0) {
     fprintf(stderr, "oc8_as_sfile_check: File is empty");
-    assert(0); //@TODO panic
+    PANIC();
   }
 
   // - trying to set properties (type, size, globl) of extern symbol
@@ -110,7 +111,7 @@ void oc8_as_sfile_check(oc8_as_sfile_t *as) {
       fprintf(stderr,
               "oc8_as_sfile_check: cannot set property of extern symbol `%s`",
               def->name);
-      assert(0); // @TODO panic
+      PANIC();
     }
   }
 }
@@ -122,7 +123,7 @@ void oc8_as_sfile_add_sym(oc8_as_sfile_t *as, const char *sym) {
             "oc8_as_sfile_add_sym: trying to add symbol `%s` of size %u, but "
             "max size is %u\n",
             sym, (unsigned)len, (unsigned)OC8_MAX_SYM_SIZE);
-    assert(0); //@TODO panic
+    PANIC();
   }
 
   // Check for label redefinition
@@ -132,7 +133,7 @@ void oc8_as_sfile_add_sym(oc8_as_sfile_t *as, const char *sym) {
             "oc8_as_sfile_add_sym: Defining symbol `%s`, but there is already "
             "one with the same name",
             sym);
-    assert(0); //@TODO panic
+    PANIC();
   }
 
   // Update position
@@ -151,7 +152,7 @@ uint16_t oc8_as_sfile_get_sym_idx(oc8_as_sfile_t *as, const char *sym) {
         "oc8_as_sfile_get_sym_idx: trying to add symbol `%s` of size %u, but "
         "max size is %u\n",
         sym, (unsigned)len, (unsigned)OC8_MAX_SYM_SIZE);
-    assert(0); //@TODO panic
+    PANIC();
   }
 
   uint16_t id = as->next_sym_idx++;

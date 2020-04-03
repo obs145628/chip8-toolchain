@@ -7,7 +7,7 @@ The stack is used for the subroutines call (call/ret instruction).
 It stores the return address instruction.
 
 Original implementation had size 12 (48 bytes)
-@TODO Why stack is 48 bytes if size 12 ?
+@TIP Why stack is 48 bytes if size 12 ?
 The emulator can have a lot more
 
 The stack is separated from main memory (cannot be manipulated directly)
