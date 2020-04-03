@@ -38,6 +38,7 @@ args_parser_t ap = {
     .bin_name = "oc8-as",
     .options_arr = opts,
     .options_size = 3,
+    .have_others = 0,
 };
 
 int main(int argc, char **argv) {

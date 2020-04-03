@@ -18,6 +18,7 @@ add_subdirectory(tests)
 
 add_subdirectory(src/apps/oc8-as)
 add_subdirectory(src/apps/oc8-bin2rom)
+add_subdirectory(src/apps/oc8-ld)
 add_subdirectory(src/apps/oc8-emu)
 add_subdirectory(src/apps/oc8-rom2bin)
 

@@ -43,6 +43,8 @@ typedef struct {
   const char *bin_name;
   args_parser_option_t *options_arr;
   size_t options_size;
+  int have_others; // if true, can have options not handled by the arguments
+                   // parser
 } args_parser_t;
 
 /// Run the arguments parser on `(argc, argv)`

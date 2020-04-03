@@ -72,6 +72,9 @@ static void add_prim(args_parser_t *ap, const char *val) {
     }
   }
 
+  if (!node && ap->have_others)
+    return;
+
   if (!node) {
     fprintf(stderr, "%s: primary value `%s' not allowed here.\n", ap->bin_name,
             val);
