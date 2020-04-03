@@ -11,5 +11,5 @@ set(TEST_SRC
 )
 set(TEST_NAME utest_oc8ld.bin)
 add_executable(${TEST_NAME} ${TEST_SRC})
-target_link_libraries(${TEST_NAME} oc8_as) 
+target_link_libraries(${TEST_NAME} oc8_as oc8_emu oc8_is oc8_ld) 
 add_dependencies(build-tests ${TEST_NAME})

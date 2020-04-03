@@ -27,7 +27,8 @@ extern "C" {
 // Linking process
 //
 // 1) Compute the start address for every obj in the final ROM file
-//    All obj code in put one after the other, starting at 0x200
+//    All obj code is located one after the other, starting at 0x200
+//    Check if the output ROM size isn't too big (max 4K)
 //
 // 2) Go through all the local symbol defs (addr != 0) for each obj file
 //    Add every def to the output symbol defs
@@ -52,6 +53,12 @@ extern "C" {
 // 6) Go through all the symbol refs of the output bin file
 //    For each one, fix the opcode in the RAM by using the known addr from the
 //    symbols def as the constant value
+//
+// A synbol '_start' must be defined, that's the program entry point.
+// Actually the entry point is still at 0x200, but the linker add this code at
+// the beginning:
+// _rom_begin:
+//  jmp _start
 
 // Contains all infos needed during linking for one obj file `bf`
 typedef struct {
@@ -63,10 +70,15 @@ typedef struct {
 typedef struct {
   oc8_ld_unit_t **units_arr; // allocated array of units, grows by realloc
   size_t units_size;
+  size_t units_cap;
+  oc8_bin_file_t start_bf;
+  int use_start_bf;
 } oc8_ld_linker_t;
 
 /// Initialize the linker `ld` with no input files
-void oc8_ld_linker_init(oc8_ld_linker_t *ld);
+/// If use_start_sym is true, the linker use the start entry point, as explained
+/// above
+void oc8_ld_linker_init(oc8_ld_linker_t *ld, int use_start_sym);
 
 /// Free all ressources alocated by the linker struct `ld`
 void oc8_ld_linker_free(oc8_ld_linker_t *ld);
@@ -75,6 +87,7 @@ void oc8_ld_linker_free(oc8_ld_linker_t *ld);
 /// Doesn't perform linking yet, just add `bf` to the list of objects
 /// `bf` must not be of type object and not bin
 /// Doesn't call `oc8_bin_file_check` on `bf`
+/// `bf` pointer must still be valid when calling `oc8_ld_linker_link`
 void oc8_ld_linker_add(oc8_ld_linker_t *ld, oc8_bin_file_t *bf);
 
 /// Link all object files specified with `oc8_ld_linker_add` into one header

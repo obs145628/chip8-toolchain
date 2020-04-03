@@ -84,7 +84,7 @@ int oc8_is_decode_ins(oc8_is_ins_t *ins, const char *buf);
 /// Write the opcode in 2 bytes of `buf`
 /// Also write it in opcode field of `ins`
 /// `buf` may be NULL: only write to opcode field
-/// @returnds != 0 il failed to encode instruction
+/// @returns != 0 il failed to encode instruction
 int oc8_is_encode_ins(oc8_is_ins_t *ins, char *buf);
 
 #ifdef __cplusplus

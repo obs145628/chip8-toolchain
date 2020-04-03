@@ -23,26 +23,28 @@ const char *test_my_add_src = "  .globl my_add\n"
                               "  .type my_add, @function\n"
                               "my_add:\n"
                               "  add %v1, %v0\n"
-                              "ret\n";
+                              "  ret\n";
 
 const char *test_sum_rec_src = "  .globl sum_rec\n"
                                "  .type sum_rec, @function\n"
                                "sum_rec:\n"
-                               "skpe 0, %v0\n"
-                               "ret\n"
-                               "mov %v0, %v4\n"
-                               "add 1, %v0\n"
-                               "call sum_rec\n"
-                               "add %v4, %v0\n"
-                               "ret\n";
+                               "  skpe 0, %v0\n"
+                               "  ret\n"
+                               "  mov %v0, %v4\n"
+                               "  add 1, %v0\n"
+                               "  call sum_rec\n"
+                               "  add %v4, %v0\n"
+                               "  ret\n";
 
-const char *test_call_add_src = "_start:\n"
-                                "mov 6, %v0\n"
-                                "mov 8, %v1\n"
-                                "call my_add\n"
-                                "mov %v0, %vf\n";
+const char *test_call_add_src = "  .globl _start\n"
+                                "_start:\n"
+                                "  mov 6, %v0\n"
+                                "  mov 8, %v1\n"
+                                "  call my_add\n"
+                                "  mov %v0, %vf\n";
 
-const char *test_call_add_mem_src = "  .type _start, @function\n"
+const char *test_call_add_mem_src = "  .globl _start\n"
+                                    "  .type _start, @function\n"
                                     "_start:\n"
                                     "  mov args, %i\n"
                                     "  movm %i, %v1\n"
@@ -81,7 +83,6 @@ const char *test_fact_table_src = "  .globl fact\n"
                                   "  .byte 0x1\n"
                                   "  .byte 0x1\n"
                                   "  .byte 0x2\n"
-                                  "  .byte 0x3\n"
                                   "  .byte 0x6\n"
                                   "  .byte 0x18\n"
                                   "  .byte 0x78\n";

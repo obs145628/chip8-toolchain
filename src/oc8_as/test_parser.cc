@@ -437,12 +437,13 @@ TEST_CASE("parse file call_add", "") {
   oc8_as_sfile_t *sf = parse_str(test_call_add_src);
   auto code = split(trim(print_short(sf)), '\n');
 
-  REQUIRE(code.size() == 5);
-  REQUIRE(trim(code[0]) == "_start:");
-  REQUIRE(trim(code[1]) == "mov 0x6, %v0");
-  REQUIRE(trim(code[2]) == "mov 0x8, %v1");
-  REQUIRE(trim(code[3]) == "call my_add");
-  REQUIRE(trim(code[4]) == "mov %v0, %vf");
+  REQUIRE(code.size() == 6);
+  REQUIRE(trim(code[0]) == ".globl _start");
+  REQUIRE(trim(code[1]) == "_start:");
+  REQUIRE(trim(code[2]) == "mov 0x6, %v0");
+  REQUIRE(trim(code[3]) == "mov 0x8, %v1");
+  REQUIRE(trim(code[4]) == "call my_add");
+  REQUIRE(trim(code[5]) == "mov %v0, %vf");
   oc8_as_sfile_free(sf);
 }
 
@@ -450,17 +451,18 @@ TEST_CASE("parse file call_add_mem", "") {
   oc8_as_sfile_t *sf = parse_str(test_call_add_mem_src);
   auto code = split(trim(print_short(sf)), '\n');
 
-  REQUIRE(code.size() == 10);
+  REQUIRE(code.size() == 11);
   REQUIRE(trim(code[0]) == ".type _start, @function");
-  REQUIRE(trim(code[1]) == "_start:");
-  REQUIRE(trim(code[2]) == "mov args, %i");
-  REQUIRE(trim(code[3]) == "movm %i, %v1");
-  REQUIRE(trim(code[4]) == "call my_add");
-  REQUIRE(trim(code[5]) == "mov %v0, %vf");
-  REQUIRE(trim(code[6]) == ".type args, @object");
-  REQUIRE(trim(code[7]) == "args:");
-  REQUIRE(trim(code[8]) == ".byte 0x8");
-  REQUIRE(trim(code[9]) == ".byte 0xD");
+  REQUIRE(trim(code[1]) == ".globl _start");
+  REQUIRE(trim(code[2]) == "_start:");
+  REQUIRE(trim(code[3]) == "mov args, %i");
+  REQUIRE(trim(code[4]) == "movm %i, %v1");
+  REQUIRE(trim(code[5]) == "call my_add");
+  REQUIRE(trim(code[6]) == "mov %v0, %vf");
+  REQUIRE(trim(code[7]) == ".type args, @object");
+  REQUIRE(trim(code[8]) == "args:");
+  REQUIRE(trim(code[9]) == ".byte 0x8");
+  REQUIRE(trim(code[10]) == ".byte 0xD");
   oc8_as_sfile_free(sf);
 }
 
@@ -468,7 +470,7 @@ TEST_CASE("parse file fact_table_src", "") {
   oc8_as_sfile_t *sf = parse_str(test_fact_table_src);
   auto code = split(trim(print_short(sf)), '\n');
 
-  REQUIRE(code.size() == 27);
+  REQUIRE(code.size() == 26);
   REQUIRE(trim(code[0]) == ".type fact, @function");
   REQUIRE(trim(code[1]) == ".globl fact");
   REQUIRE(trim(code[2]) == "fact:");
@@ -492,9 +494,8 @@ TEST_CASE("parse file fact_table_src", "") {
   REQUIRE(trim(code[20]) == ".byte 0x1");
   REQUIRE(trim(code[21]) == ".byte 0x1");
   REQUIRE(trim(code[22]) == ".byte 0x2");
-  REQUIRE(trim(code[23]) == ".byte 0x3");
-  REQUIRE(trim(code[24]) == ".byte 0x6");
-  REQUIRE(trim(code[25]) == ".byte 0x18");
-  REQUIRE(trim(code[26]) == ".byte 0x78");
+  REQUIRE(trim(code[23]) == ".byte 0x6");
+  REQUIRE(trim(code[24]) == ".byte 0x18");
+  REQUIRE(trim(code[25]) == ".byte 0x78");
   oc8_as_sfile_free(sf);
 }

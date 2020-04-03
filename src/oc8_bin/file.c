@@ -90,7 +90,7 @@ void oc8_bin_file_set_version(oc8_bin_file_t *bf, uint16_t version) {
 }
 
 void oc8_bin_file_set_type(oc8_bin_file_t *bf, oc8_bin_file_type_t type) {
-  if (type != OC8_BIN_FILE_TYPE_OBJ && type != OC8_BIN_FILE_TYPE_OBJ) {
+  if (type != OC8_BIN_FILE_TYPE_OBJ && type != OC8_BIN_FILE_TYPE_BIN) {
     fprintf(stderr, "bin_file_check fail: invalid type %u.\n", (unsigned)type);
     PANIC();
   }
@@ -153,6 +153,7 @@ uint16_t oc8_bin_file_add_def(oc8_bin_file_t *bf, const char *name,
     PANIC();
   }
 
+  def->id = id;
   return id;
 }
 

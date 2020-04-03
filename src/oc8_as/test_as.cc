@@ -293,7 +293,7 @@ TEST_CASE("compile fact_table", "") {
 
   REQUIRE(bf.syms_defs_size == 5);
   REQUIRE(bf.syms_refs_size == 3);
-  REQUIRE(bf.rom_size == 12 * 2 + 7);
+  REQUIRE(bf.rom_size == 12 * 2 + 6);
   REQUIRE(ext_syms(&bf) == std::set<std::string>{});
   REQUIRE(def_syms(&bf) ==
           std::set<std::string>{"fact", "Lmax", "Ltable", "Lend", "table"});
