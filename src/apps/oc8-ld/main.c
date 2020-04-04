@@ -3,24 +3,11 @@
 
 #include "args_parser/args_parser.h"
 #include "oc8_bin/bin_reader.h"
+#include "oc8_bin/bin_writer.h"
 #include "oc8_bin/file.h"
 #include "oc8_ld/linker.h"
 
 #define MAX_IN_FILES 64
-
-#if 0
-
-static inline void read_err(const char *in_path) {
-  fprintf(stderr, "oc8-ld: Failed to read input file `%s'.\n", in_path);
-  exit(1);
-}
-
-static inline void write_err(const char *out_path) {
-  fprintf(stderr, "oc8-ld: Failed to write output file `%s'.\n", out_path);
-  exit(1);
-}
-
-#endif
 
 args_parser_option_t opts[2] = {
     {
@@ -57,6 +44,7 @@ int main(int argc, char **argv) {
   oc8_bin_file_t in_objs[MAX_IN_FILES];
   oc8_ld_linker_init(&ld, 1);
 
+  // Find and add all input object files
   for (int i = 1; i < argc; ++i) {
     if (argv[i] == out_path || (i + 1 < argc && argv[i + 1] == out_path))
       continue;
@@ -80,31 +68,16 @@ int main(int argc, char **argv) {
     oc8_ld_linker_add(&ld, obj);
   }
 
-  printf("output file is `%s'\n", out_path);
-
-#if 0
-  
-  // Read and check file
+  // Link all files in one binary, and save it
   oc8_bin_file_t bf;
-  oc8_bin_read_from_file(&bf, in_path);
+  oc8_ld_linker_link(&ld, &bf);
   oc8_bin_file_check(&bf, /*is_bin=*/1);
+  oc8_bin_write_to_file(&bf, out_path);
 
-  // Write ROM to output file
-  FILE *os = fopen(out_path, "wb");
-  if (!os)
-    io_err(out_path);
-  if (fwrite(bf.rom, 1, bf.rom_size, os) != bf.rom_size)
-    io_err(out_path);
-
-  // Cleanup files
-  oc8_bin_file_free(&bf);
-  fclose(os);
-
-#endif
-
+  // Cleanup
   for (size_t i = 0; i < nb_inputs; ++i)
     oc8_bin_file_free(&in_objs[i]);
+  oc8_bin_file_free(&bf);
   oc8_ld_linker_free(&ld);
-
   return 0;
 }

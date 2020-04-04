@@ -1,5 +1,6 @@
+  .globl _start
   .type _start, @function
- _start:
+_start:
   mov args, %i
   movm %i, %v1
   call my_add

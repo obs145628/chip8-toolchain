@@ -3,7 +3,7 @@
 
 This is a complete toolchain for the CHIP-8, mostly written in C.  
 - emulator (done).  
-- toolchain (backend): almost done (expect linker, and binaries).  
+- toolchain (backend): almost done (except objdump).  
 - debugger: TODO.  
 - compiler: Front/middle end done, backend TODO.  
 - JIT x64: TODO
@@ -19,7 +19,7 @@ GUI with SDL, no sound.
 
 ## oc8-as
 
-Usage: ./oc8-emu <input-file> [-o <output-file>].  
+Usage: `./oc8-emu <input-file> [-o <output-file>].`  
 
 Compile an assembly text file (.c8s) into object file (.c8o)
 
@@ -30,17 +30,17 @@ Print binary file (.c8o / .c8bin) into human-readable form
 
 ## oc8-ld
 
-TODO  
+Usage: `./oc8-emu <input-files> -o <output-file>`.  
 Takes many object files (.c8o) and combine them in one binary ROM (.c8bin)
 
 ## oc8-bin2rom
 
-TODO  
+Usage: `./oc8-bin2rom <input-file> -o <output-file>`.  
 Take a binary file (.c8bin), strip all symbol infos, and create a native CHIP-8 ROM file.
 
 ## oc8-rom2bin
 
-TODO  
+Usage: `./oc8-rom2bin <input-file> -o <output-file>`.  
 Take a CHIP-8 ROM file, and add some genric symbol infos (empty tables) 
 to save it to a binary file (.c8bin)
 
@@ -82,7 +82,6 @@ Dependencies: `oc8_smap`
 
 ## oc8_ld
 
-TODO.  
 Take many object `bin_file` structs, and combine them in one runnable `bin_file` struct.  
 Dependencies: `oc8_bin`
 
