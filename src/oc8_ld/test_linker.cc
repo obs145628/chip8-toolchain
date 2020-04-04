@@ -18,6 +18,11 @@
 
 #include "../../tests/test_src.h"
 
+#define BIN_AS BUILD_DIR "/bin/oc8-as"
+#define BIN_LD BUILD_DIR "/bin/oc8-ld"
+#define BIN_B2R BUILD_DIR "/bin/oc8-bin2rom"
+#define BIN_R2B BUILD_DIR "/bin/oc8-rom2bin"
+
 namespace {
 
 void write_bin(const std::string &path, const void *buf, size_t len) {
@@ -76,12 +81,11 @@ void compile_str_bin(const std::vector<const char *> &code,
     auto obj_path = "/tmp/oc8_test_linker_in_" + std::to_string(i) + ".c8o";
     obj_paths.push_back(obj_path);
 
-    std::string cmd =
-        "./bin/oc8-as" + std::string(" ") + code_path + " -o " + obj_path;
+    std::string cmd = BIN_AS + std::string(" ") + code_path + " -o " + obj_path;
     REQUIRE(std::system(cmd.c_str()) == 0);
   }
 
-  std::string link_cmd = "./bin/oc8-ld" + std::string(" -o ") + out_path;
+  std::string link_cmd = BIN_LD + std::string(" -o ") + out_path;
   for (const auto &p : obj_paths)
     link_cmd += " " + p;
   REQUIRE(std::system(link_cmd.c_str()) == 0);
@@ -289,7 +293,7 @@ TEST_CASE("binaries program call_add_mem_src", "") {
   REQUIRE(bf.rom_size == 16);
 
   std::string cmd_b2r =
-      "./bin/oc8-bin2rom" + std::string(" ") + bin_path + " -o " + rom_path;
+      BIN_B2R + std::string(" ") + bin_path + " -o " + rom_path;
   REQUIRE(std::system(cmd_b2r.c_str()) == 0);
   size_t rom_size;
   uint8_t *rom_buf = (uint8_t *)read_bin(rom_path, &rom_size);
@@ -298,7 +302,7 @@ TEST_CASE("binaries program call_add_mem_src", "") {
     REQUIRE(bf.rom[i] == rom_buf[i]);
 
   std::string cmd_r2b =
-      "./bin/oc8-rom2bin" + std::string(" ") + rom_path + " -o " + bin2_path;
+      BIN_R2B + std::string(" ") + rom_path + " -o " + bin2_path;
   REQUIRE(std::system(cmd_r2b.c_str()) == 0);
 
   oc8_bin_file_t bf2;

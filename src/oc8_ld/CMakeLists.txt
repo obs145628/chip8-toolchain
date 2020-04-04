@@ -1,3 +1,5 @@
+add_definitions(-DBUILD_DIR="${CMAKE_BINARY_DIR}")
+
 set(SRC
   linker.c
 )
