@@ -14,7 +14,7 @@ args_parser_option_t opts[3] = {
     {
         .name = "input",
         .type = ARGS_PARSER_OTY_PRIM,
-        .desc = "Path to input CHIP-8 ROM file",
+        .desc = "Path to input object bin file (.c8bin)",
         .required = 1,
     },
 
@@ -23,7 +23,7 @@ args_parser_option_t opts[3] = {
         .id_short = 'o',
         .id_long = "output",
         .type = ARGS_PARSER_OTY_VAL,
-        .desc = "Path to output object bin file (.c8bin)",
+        .desc = "Path to output CHIP-8 ROM file",
         .required = 1,
     },
 

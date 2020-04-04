@@ -15,7 +15,7 @@ args_parser_option_t opts[3] = {
     {
         .name = "input",
         .type = ARGS_PARSER_OTY_PRIM,
-        .desc = "Path to input binary file (.c8bin)",
+        .desc = "Path to input CHIP-8 ROM file",
         .required = 1,
     },
 
@@ -24,7 +24,7 @@ args_parser_option_t opts[3] = {
         .id_short = 'o',
         .id_long = "output",
         .type = ARGS_PARSER_OTY_VAL,
-        .desc = "Path to output CHIP-8 ROM file",
+        .desc = "Path to output binary file (.c8bin)",
         .required = 1,
     },
 
@@ -38,7 +38,7 @@ args_parser_option_t opts[3] = {
 };
 
 args_parser_t ap = {
-    .bin_name = "oc8-bin2rom",
+    .bin_name = "oc8-rom2bin",
     .options_arr = opts,
     .options_size = 3,
     .have_others = 0,
@@ -60,7 +60,7 @@ int main(int argc, char **argv) {
     io_err(in_path);
   if (fseek(is, 0, SEEK_SET) != 0)
     io_err(in_path);
-  char *rom_data = malloc(sizeof(rom_size));
+  char *rom_data = malloc(rom_size);
   if (fread(rom_data, 1, rom_size, is) != rom_size)
     io_err(in_path);
 
