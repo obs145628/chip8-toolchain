@@ -8,6 +8,14 @@ This is a complete toolchain for the CHIP-8, mostly written in C.
 - compiler: Front/middle end done, backend TODO.  
 - JIT x64: TODO
 
+# Environment
+
+I only tested my programs on the following environment:
+- Ubuntu 18.04 x64 
+- GCC 7.5 
+- python 3.6.9
+- cmake 3.10.2
+
 # Programs
 
 ## oc8-emu
