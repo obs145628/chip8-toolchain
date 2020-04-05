@@ -81,6 +81,7 @@ void oc8_emu_init_cpu();
 
 /// Must be called only once, to prepare the emu, before loading the ROM.
 /// Initialize all required parts of the CHIP-8: CPU, mem, video output, etc
+/// Can be called multiple times to reset and restart the CPU (done in TS)
 void oc8_emu_init();
 
 /// Run one instruction, ignoring the clock speed

@@ -136,6 +136,13 @@ typedef struct {
 /// Initialize `bf` to empty, unprepared file, and allocate all needed memory
 void oc8_bin_file_init(oc8_bin_file_t *bf);
 
+/// Initialize `bf` with ROM copied from `rom`
+/// This function doesn't call `oc8_bin_file_check`
+/// `bf` will be an executable binary, without any symbol infos
+/// except `_rom_begin` at 0x200
+void oc8_bin_file_init_binary_rom(oc8_bin_file_t *bf, const void *rom,
+                                  size_t rom_size);
+
 /// Free all memory allocated by `bf`
 void oc8_bin_file_free(oc8_bin_file_t *bf);
 

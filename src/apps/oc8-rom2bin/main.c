@@ -66,16 +66,7 @@ int main(int argc, char **argv) {
 
   // Build and save bin object
   oc8_bin_file_t bf;
-  oc8_bin_file_init(&bf);
-  oc8_bin_file_set_version(&bf, 10);
-  oc8_bin_file_set_type(&bf, OC8_BIN_FILE_TYPE_BIN);
-  // add _rom_begin symbol at 0x200
-  oc8_bin_file_set_defs_count(&bf, 1);
-  oc8_bin_file_add_def(&bf, "_rom_begin", 0, OC8_BIN_SYM_TYPE_NO,
-                       OC8_ROM_START);
-  // copy full rom content
-  oc8_bin_file_init_rom(&bf, rom_size);
-  memcpy(bf.rom, rom_data, rom_size);
+  oc8_bin_file_init_binary_rom(&bf, rom_data, rom_size);
   oc8_bin_file_check(&bf, /*is_bin=*/1);
   oc8_bin_write_to_file(&bf, out_path);
 

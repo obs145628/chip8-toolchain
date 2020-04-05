@@ -1,6 +1,10 @@
 #include "oc8_emu/mem.h"
 
+#include "oc8_bin/bin_reader.h"
+#include "oc8_bin/file.h"
+#include "oc8_bin/format.h"
 #include "oc8_emu/cpu.h"
+#include "oc8_emu/debug.h"
 
 #include <errno.h>
 #include <stdio.h>
@@ -46,9 +50,13 @@ void oc8_emu_load_rom(const void *rom_bytes, unsigned rom_size) {
   g_oc8_emu_cpu.reg_pc = OC8_EMU_ROM_ADDR;
 }
 
-void oc8_emu_load_rom_file(const char *path) {
-  unsigned max_size = OC8_EMU_RAM_SIZE - OC8_EMU_ROM_ADDR;
+void oc8_emu_load_bin(oc8_bin_file_t *bf) {
+  oc8_emu_load_rom(bf->rom, bf->rom_size);
+  memcpy(&g_oc8_emu_bin_file, bf, sizeof(oc8_bin_file_t));
+}
 
+void oc8_emu_load_rom_file(const char *path) {
+  // Open and load file content
   FILE *is = fopen(path, "rb");
   if (is == NULL) {
     fprintf(stderr,
@@ -59,14 +67,6 @@ void oc8_emu_load_rom_file(const char *path) {
 
   fseek(is, 0, SEEK_END);
   unsigned long rom_size = ftell(is);
-  if (rom_size > (unsigned long)max_size) {
-    fprintf(stderr,
-            "oc8_emu_load_rom_file failed: file %s is of size is %lu, max size "
-            "is %u. Aborting !\n",
-            path, rom_size, max_size);
-    exit(1);
-  }
-
   fseek(is, 0, SEEK_SET);
   uint8_t *buf = (uint8_t *)malloc(rom_size);
 
@@ -77,7 +77,38 @@ void oc8_emu_load_rom_file(const char *path) {
     exit(1);
   }
 
-  oc8_emu_load_rom(buf, (unsigned)rom_size);
+  // Check if ocbin file
+  size_t magic_size = sizeof(g_oc8_bin_raw_magic_value);
+  int is_bin = rom_size > magic_size;
+  if (is_bin)
+    for (size_t i = 0; i < magic_size; ++i)
+      if (buf[i] != g_oc8_bin_raw_magic_value[i]) {
+        is_bin = 0;
+        break;
+      }
+
+  // Load ocbin file
+  if (is_bin) {
+    oc8_bin_file_t bf;
+    oc8_bin_read_file_raw(&bf, buf, rom_size);
+    oc8_bin_file_check(&bf, /*is_bin=*/1);
+    oc8_emu_load_bin(&bf);
+  }
+
+  // Load ROM file
+  else {
+    unsigned max_size = OC8_EMU_RAM_SIZE - OC8_EMU_ROM_ADDR;
+    if (rom_size > (unsigned long)max_size) {
+      fprintf(stderr,
+              "oc8_emu_load_rom_file failed: file %s is of size %lu, max size "
+              "is %u. Aborting !\n",
+              path, rom_size, max_size);
+      exit(1);
+    }
+    oc8_emu_load_rom(buf, (unsigned)rom_size);
+  }
+
+  // Clear memory
   free(buf);
   fclose(is);
 }

@@ -16,6 +16,8 @@
 
 #include <stdint.h>
 
+#include "../oc8_bin/file.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -48,8 +50,17 @@ void oc8_emu_init_mem();
 /// Also set the PC at the beginning of the rom
 void oc8_emu_load_rom(const void *rom_bytes, unsigned rom_size);
 
-/// Wrapper around `oc8_emu_load_rom`
+/// Load ROM in `bf`
+/// Also assign `bf` as the debug bin of the emu
+/// `bf` is moved into emu and cannot be used (or free'd) after this
+/// Also set the PC at the beginning of the rom
+/// `oc8_bin_file_check` isn't called
+void oc8_emu_load_bin(oc8_bin_file_t *bf);
+
+/// Wrapper around `oc8_emu_load_rom` / `oc8_emu_load_bin`
 /// Open / close the file, and do all the checks
+/// Can load raw ROM file. or binary `.ocbin` file
+/// Detect if the file is `.ocbin` (using magic number, not ext)
 void oc8_emu_load_rom_file(const char *path);
 
 #ifdef __cplusplus

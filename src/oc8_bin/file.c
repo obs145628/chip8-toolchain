@@ -23,6 +23,19 @@ void oc8_bin_file_init(oc8_bin_file_t *bf) {
   bf->rom_size = 0;
 }
 
+void oc8_bin_file_init_binary_rom(oc8_bin_file_t *bf, const void *rom,
+                                  size_t rom_size) {
+  oc8_bin_file_init(bf);
+  oc8_bin_file_set_version(bf, 10);
+  oc8_bin_file_set_type(bf, OC8_BIN_FILE_TYPE_BIN);
+  // add _rom_begin symbol at 0x200
+  oc8_bin_file_set_defs_count(bf, 1);
+  oc8_bin_file_add_def(bf, "_rom_begin", 0, OC8_BIN_SYM_TYPE_NO, OC8_ROM_START);
+  // copy full rom content
+  oc8_bin_file_init_rom(bf, rom_size);
+  memcpy(bf->rom, rom, rom_size);
+}
+
 void oc8_bin_file_free(oc8_bin_file_t *bf) {
   free(bf->syms_defs);
   free(bf->syms_refs);

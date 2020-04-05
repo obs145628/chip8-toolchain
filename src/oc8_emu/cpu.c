@@ -1,6 +1,7 @@
 #define _POSIX_C_SOURCE 200809L
 
 #include "oc8_emu/cpu.h"
+#include "oc8_emu/debug.h"
 #include "oc8_emu/input.h"
 #include "oc8_emu/mem.h"
 #include "oc8_emu/screen.h"
@@ -45,6 +46,7 @@ void oc8_emu_init() {
   oc8_emu_init_keypad();
   oc8_emu_init_mem();
   oc8_emu_init_screen();
+  oc8_emu_init_debug();
 }
 
 static void decrease_timers(unsigned val) {
