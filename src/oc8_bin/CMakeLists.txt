@@ -17,9 +17,7 @@ set(TEST_SRC
   ${CMAKE_SOURCE_DIR}/tests/test_src.c
 )
 set(TEST_NAME utest_oc8bin.bin)
-add_executable(${TEST_NAME} ${TEST_SRC})
+add_executable(${TEST_NAME} EXCLUDE_FROM_ALL ${TEST_SRC})
+add_dependencies(${TEST_NAME} oc8-as oc8-objdump)
 target_link_libraries(${TEST_NAME} oc8_bin oc8_as)
 add_dependencies(build-tests ${TEST_NAME})
-
-
-# @TODO remove all test binaries from all

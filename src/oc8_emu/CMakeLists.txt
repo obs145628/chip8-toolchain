@@ -16,6 +16,6 @@ set(TEST_SRC
   test_timer.cc
 )
 set(TEST_NAME utest_oc8emu.bin)
-add_executable(${TEST_NAME} ${TEST_SRC})
+add_executable(${TEST_NAME} EXCLUDE_FROM_ALL ${TEST_SRC})
 target_link_libraries(${TEST_NAME} oc8_emu) 
 add_dependencies(build-tests ${TEST_NAME})
