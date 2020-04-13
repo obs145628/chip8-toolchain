@@ -16,6 +16,10 @@
 
 #include <odb/server_capi/vm-api.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 extern odb_vm_api_vtable_t g_oc8_odb_vm_api_table;
 
 /// Must be called to create an argument for the VMApi object
@@ -23,5 +27,9 @@ extern odb_vm_api_vtable_t g_oc8_odb_vm_api_table;
 /// debug symbols
 /// Allocate memory free only by the destructor in `g_oc8_odb_vm_api_table`
 odb_vm_api_data_t oc8_odb_vm_make_data();
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // !EMU_ODB_VM_API_H_

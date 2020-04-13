@@ -314,7 +314,7 @@ void oc8_bin_printer_free(oc8_bin_printer_t *p) {
 
 int oc8_bin_printer_print_at(oc8_bin_printer_t *p, uint16_t addr,
                              int print_sym_defs, int print_sym_refs,
-                             int print_sym_ids,
+                             int print_sym_ids, int print_opcode,
                              oc8_bin_printer_data_t data_hint, size_t *buf_size,
                              uint16_t *inc) {
   oc8_bin_file_t *bf = p->bf;
@@ -355,9 +355,11 @@ int oc8_bin_printer_print_at(oc8_bin_printer_t *p, uint16_t addr,
   }
 
   if (ty == OC8_BIN_PRINTER_DATA_OPCODE) {
-    char op_buf[32];
-    sprintf(op_buf, "      %04X        ", (unsigned)*((uint16_t *)code_ptr));
-    write_str(p, op_buf);
+    if (print_opcode) {
+      char op_buf[32];
+      sprintf(op_buf, "      %04X        ", (unsigned)*((uint16_t *)code_ptr));
+      write_str(p, op_buf);
+    }
 
     char sym_id_buff[7];
     if (sym && print_sym_ids) {
@@ -370,17 +372,21 @@ int oc8_bin_printer_print_at(oc8_bin_printer_t *p, uint16_t addr,
   }
 
   else if (ty == OC8_BIN_PRINTER_DATA_BYTE) {
-    char op_buf[32];
-    sprintf(op_buf, "      %02X          ", (unsigned)*((uint8_t *)code_ptr));
-    write_str(p, op_buf);
+    if (print_opcode) {
+      char op_buf[32];
+      sprintf(op_buf, "      %02X          ", (unsigned)*((uint8_t *)code_ptr));
+      write_str(p, op_buf);
+    }
     dump_byte(p, addr);
     *inc = 1;
   }
 
   else if (ty == OC8_BIN_PRINTER_DATA_WORD) {
-    char op_buf[32];
-    sprintf(op_buf, "      %04X        ", (unsigned)*((uint16_t *)code_ptr));
-    write_str(p, op_buf);
+    if (print_opcode) {
+      char op_buf[32];
+      sprintf(op_buf, "      %04X        ", (unsigned)*((uint16_t *)code_ptr));
+      write_str(p, op_buf);
+    }
     dump_word(p, addr);
     *inc = 2;
   }

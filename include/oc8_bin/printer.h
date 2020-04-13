@@ -66,6 +66,7 @@ void oc8_bin_printer_free(oc8_bin_printer_t *p);
 /// name, and not by value
 /// @param print_sym_ids - If true, symbol refs are printed using the index, and
 /// not the name. This parameter is to output odb compatible text.
+/// @param print_opcode - If true, also print the opcode
 /// @param data_hint - Tell what kind of data is to be printed. If unkown, it's
 /// guessed by the printer
 /// @param buf_size - Will contain the number of bytes written (without final
@@ -75,7 +76,7 @@ void oc8_bin_printer_free(oc8_bin_printer_t *p);
 /// @return 0 if success, 1 otherwhise
 int oc8_bin_printer_print_at(oc8_bin_printer_t *p, uint16_t addr,
                              int print_sym_defs, int print_sym_refs,
-                             int print_sym_ids,
+                             int print_sym_ids, int print_opcode,
                              oc8_bin_printer_data_t data_hint, size_t *buf_size,
                              uint16_t *inc);
 

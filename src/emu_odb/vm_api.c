@@ -321,11 +321,12 @@ static void get_code_text(odb_vm_api_data_t data, odb_vm_api_error_t *err,
                           odb_vm_ptr_t addr, char *out_text,
                           odb_vm_size_t *out_addr_dist) {
   api_data_t *ad = (api_data_t *)data;
+  oc8_bin_file_t *bf = &g_oc8_emu_bin_file;
   if (addr >= OC8_MEMORY_SIZE) {
     strcpy(err->msg, "Memory address out of bounds");
     return;
   }
-  if (addr < OC8_ROM_START) {
+  if (addr < OC8_ROM_START || addr >= OC8_ROM_START + bf->rom_size) {
     out_text[0] = 0;
     return;
   }
@@ -335,7 +336,7 @@ static void get_code_text(odb_vm_api_data_t data, odb_vm_api_error_t *err,
   uint16_t inc;
   int res = oc8_bin_printer_print_at(&ad->printer, addr,
                                      /*print_sym_defs=*/0, /*print_sym_refs=*/1,
-                                     /*print_sym_defs=*/1,
+                                     /*print_sym_defs=*/1, /*print_opcode=*/0,
                                      /*data_hint=*/OC8_BIN_PRINTER_DATA_UNKOWN,
                                      &buf_size, &inc);
   if (buf_size == 0 || res != 0) {
