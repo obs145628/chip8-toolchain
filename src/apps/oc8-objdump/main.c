@@ -57,6 +57,7 @@ int main(int argc, char **argv) {
     size_t txt_len;
     oc8_bin_printer_print_at(&printer, addr + OC8_ROM_START,
                              /*print_sym_defs=*/1, /*print_sym_refs=*/1,
+                             /*print_sym_ids=*/0,
                              /*data_hint=*/OC8_BIN_PRINTER_DATA_UNKOWN,
                              &txt_len, &inc);
 

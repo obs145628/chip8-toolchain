@@ -64,15 +64,18 @@ void oc8_bin_printer_free(oc8_bin_printer_t *p);
 /// @param print_sym_defs - If true, print all symbols defs before (eg `foo:\n`)
 /// @param print_sym_refs - If true, print all symbol refs in instruction by
 /// name, and not by value
+/// @param print_sym_ids - If true, symbol refs are printed using the index, and
+/// not the name. This parameter is to output odb compatible text.
 /// @param data_hint - Tell what kind of data is to be printed. If unkown, it's
 /// guessed by the printer
 /// @param buf_size - Will contain the number of bytes written (without final
 /// \0)
 /// @param inc - will contain the number of bytes analyzed from the rom (1 for
 /// byte, 2 for opcode, etc)
-/// @return 0 if success, 0 otherwhise
+/// @return 0 if success, 1 otherwhise
 int oc8_bin_printer_print_at(oc8_bin_printer_t *p, uint16_t addr,
                              int print_sym_defs, int print_sym_refs,
+                             int print_sym_ids,
                              oc8_bin_printer_data_t data_hint, size_t *buf_size,
                              uint16_t *inc);
 

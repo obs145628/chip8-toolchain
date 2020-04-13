@@ -314,6 +314,7 @@ void oc8_bin_printer_free(oc8_bin_printer_t *p) {
 
 int oc8_bin_printer_print_at(oc8_bin_printer_t *p, uint16_t addr,
                              int print_sym_defs, int print_sym_refs,
+                             int print_sym_ids,
                              oc8_bin_printer_data_t data_hint, size_t *buf_size,
                              uint16_t *inc) {
   oc8_bin_file_t *bf = p->bf;
@@ -357,6 +358,13 @@ int oc8_bin_printer_print_at(oc8_bin_printer_t *p, uint16_t addr,
     char op_buf[32];
     sprintf(op_buf, "      %04X        ", (unsigned)*((uint16_t *)code_ptr));
     write_str(p, op_buf);
+
+    char sym_id_buff[7];
+    if (sym && print_sym_ids) {
+      sprintf(sym_id_buff, "{%d}", (int)ref->id);
+      sym = sym_id_buff;
+    }
+
     dump_ins(p, &ins, sym);
     *inc = 2;
   }

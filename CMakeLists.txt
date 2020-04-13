@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.0)
 project(chip8-toolchain)
 
+include_directories("/home/obs/rep/odb/include/")
+
 include_directories(SYSTEM "./extern/Catch2/single_include/")
 include_directories("./include/")
 
@@ -30,3 +32,5 @@ add_subdirectory(src/oc8_is)
 add_subdirectory(src/oc8_emu)
 add_subdirectory(src/oc8_ld)
 add_subdirectory(src/oc8_smap)
+
+add_subdirectory(src/emu_odb)
