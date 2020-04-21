@@ -9,9 +9,12 @@ add_library(oc8_debug ${SRC})
 target_link_libraries(oc8_debug oc8_emu oc8_bin ${ODB_LIBS} -lstdc++)
 
 
+add_definitions(-DBUILD_DIR="${CMAKE_BINARY_DIR}")
+
 set(TEST_SRC
   test_main.cc
   test_debug.cc
+  test_db_client.cc
   ${CMAKE_SOURCE_DIR}/tests/test_src.c
 )
 set(TEST_NAME utest_oc8debug.bin)

@@ -1,45 +1,11 @@
 #include <catch2/catch.hpp>
 
-#include <cstring>
-#include <vector>
-
 #include <odb/server/debugger.hh>
 #include <odb/server_capi/vm-api.h>
 
-#include "../../tests/test_src.h"
-#include "oc8_as/as.h"
-#include "oc8_as/parser.h"
-#include "oc8_as/sfile.h"
-#include "oc8_bin/file.h"
-#include "oc8_debug/vm_api.h"
-#include "oc8_emu/cpu.h"
-#include "oc8_emu/mem.h"
-#include "oc8_ld/linker.h"
+#include "test_utils.hh"
 
 namespace {
-
-void compile_str(const std::vector<const char *> &code, oc8_bin_file_t *bf) {
-  std::vector<oc8_bin_file_t> objs(code.size());
-  oc8_ld_linker_t ld;
-  oc8_ld_linker_init(&ld, 1);
-
-  for (std::size_t i = 0; i < code.size(); ++i) {
-    oc8_as_sfile_t *sf = oc8_as_parse_raw(code[i], strlen(code[i]));
-    oc8_bin_file_t *bf = &objs[i];
-    oc8_as_sfile_check(sf);
-    oc8_as_compile_sfile(sf, bf);
-    oc8_bin_file_check(bf, 0);
-    oc8_as_sfile_free(sf);
-    oc8_ld_linker_add(&ld, bf);
-  }
-
-  oc8_ld_linker_link(&ld, bf);
-  oc8_bin_file_check(bf, 1);
-
-  for (auto &obj : objs)
-    oc8_bin_file_free(&obj);
-  oc8_ld_linker_free(&ld);
-}
 
 void init_emu(oc8_bin_file_t *bf) {
   oc8_emu_init();
