@@ -3,8 +3,8 @@
 #include "oc8_bin/bin_reader.h"
 #include "oc8_bin/file.h"
 #include "oc8_bin/format.h"
+#include "oc8_debug/debug.h"
 #include "oc8_emu/cpu.h"
-#include "oc8_emu/debug.h"
 
 #include <errno.h>
 #include <stdio.h>
@@ -52,7 +52,7 @@ void oc8_emu_load_rom(const void *rom_bytes, unsigned rom_size) {
 
 void oc8_emu_load_bin(oc8_bin_file_t *bf) {
   oc8_emu_load_rom(bf->rom, bf->rom_size);
-  memcpy(&g_oc8_emu_bin_file, bf, sizeof(oc8_bin_file_t));
+  memcpy(&g_oc8_debug_bin_file, bf, sizeof(oc8_bin_file_t));
 }
 
 void oc8_emu_load_rom_file(const char *path) {

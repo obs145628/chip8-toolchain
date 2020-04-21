@@ -38,10 +38,11 @@ make
 
 ## oc8-emu
 
-Usage: `./oc8-emu <file>`
+Usage: `./oc8-emu <file> [--no-gui]` 
 
 Take a CHIP-8 ROM or `.c8bin' file as input, and run the emulator.  
-GUI with SDL2, no sound.
+GUI with SDL2, no sound.  
+No GUI mode disable SDL. Used for debugging purposes.
 
 ## oc8-as
 
@@ -71,6 +72,9 @@ Usage: `./oc8-rom2bin <input-rom-file> -o <output-bin-file>`.
 Take a CHIP-8 ROM file, and add some genric symbol infos (empty tables) 
 to save it to a binary file (.c8bin)
 
+# Debugger
+
+@TODO
 
 # Libraries
 
@@ -102,6 +106,11 @@ Represent binary data (`.c8o` and `.c8bin` files)
 - BinReader: Read binary `.c8o` / `.c8bin` file and build `bin_file` struct
 - BinWriter: Write binary `.c8o` / `.c8bin` file from `bin_file` struct
 - Printer: Generate human-readable string from `bin_file` struct.
+
+## oc8_debug
+
+Use ODB library to add debugging features to `oc8_emu`.  
+More infos in Debugger section.
 
 ## oc8_ld
 

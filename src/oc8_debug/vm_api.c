@@ -1,15 +1,15 @@
 #define _GNU_SOURCE
 
-#include "emu_odb/vm_api.h"
+#include "oc8_debug/vm_api.h"
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 #include "oc8_bin/printer.h"
+#include "oc8_debug/debug.h"
 #include "oc8_defs/consts.h"
 #include "oc8_emu/cpu.h"
-#include "oc8_emu/debug.h"
 #include "oc8_emu/mem.h"
 
 // Registers mapping:
@@ -66,7 +66,7 @@ static void get_vm_infos(odb_vm_api_data_t data, odb_vm_api_error_t *err,
   ad->old_pc = 0;
   oc8_emu_cpu_t *cpu = &g_oc8_emu_cpu;
   ad->old_sp = cpu->reg_sp;
-  oc8_bin_file_t *bf = &g_oc8_emu_bin_file;
+  oc8_bin_file_t *bf = &g_oc8_debug_bin_file;
 
   out_infos->name = "oc8_emu";
   out_infos->regs_general = regs_general;
@@ -252,7 +252,7 @@ static void get_symbols(odb_vm_api_data_t data, odb_vm_api_error_t *err,
     return;
   }
   api_data_t *ad = (api_data_t *)data;
-  oc8_bin_file_t *bf = &g_oc8_emu_bin_file;
+  oc8_bin_file_t *bf = &g_oc8_debug_bin_file;
   size_t count = 0;
   odb_vm_size_t act_size = 0;
 
@@ -286,7 +286,7 @@ static void get_symbols(odb_vm_api_data_t data, odb_vm_api_error_t *err,
 static void get_symb_infos(odb_vm_api_data_t data, odb_vm_api_error_t *err,
                            odb_vm_sym_t idx, odb_symbol_infos_t *out_sym) {
   (void)data;
-  oc8_bin_file_t *bf = &g_oc8_emu_bin_file;
+  oc8_bin_file_t *bf = &g_oc8_debug_bin_file;
   if ((size_t)idx >= bf->syms_defs_size) {
     strcpy(err->msg, "Invalid symbol index");
     return;
@@ -302,7 +302,7 @@ static void get_symb_infos(odb_vm_api_data_t data, odb_vm_api_error_t *err,
 static odb_vm_sym_t find_sym_id(odb_vm_api_data_t data, odb_vm_api_error_t *err,
                                 const char *name) {
   (void)data;
-  oc8_bin_file_t *bf = &g_oc8_emu_bin_file;
+  oc8_bin_file_t *bf = &g_oc8_debug_bin_file;
   oc8_bin_sym_def_t *res = NULL;
 
   for (size_t i = 0; i < bf->syms_defs_size; ++i) {
@@ -324,13 +324,14 @@ static void get_code_text(odb_vm_api_data_t data, odb_vm_api_error_t *err,
                           odb_vm_ptr_t addr, char *out_text,
                           odb_vm_size_t *out_addr_dist) {
   api_data_t *ad = (api_data_t *)data;
-  oc8_bin_file_t *bf = &g_oc8_emu_bin_file;
+  oc8_bin_file_t *bf = &g_oc8_debug_bin_file;
   if (addr >= OC8_MEMORY_SIZE) {
     strcpy(err->msg, "Memory address out of bounds");
     return;
   }
   if (addr < OC8_ROM_START || addr >= OC8_ROM_START + bf->rom_size) {
     out_text[0] = 0;
+    *out_addr_dist = 1;
     return;
   }
 
@@ -364,8 +365,8 @@ static void cleanup(odb_vm_api_data_t data) {
 }
 
 odb_vm_api_data_t oc8_odb_vm_make_data() {
-  oc8_emu_gen_debug_bin_file();
-  oc8_bin_file_t *bf = &g_oc8_emu_bin_file;
+  oc8_debug_gen_bin_file();
+  oc8_bin_file_t *bf = &g_oc8_debug_bin_file;
   api_data_t *ad = malloc(sizeof(api_data_t));
   ad->sorted_defs = malloc(bf->syms_defs_size * sizeof(uint16_t));
   for (size_t i = 0; i < bf->syms_defs_size; ++i)

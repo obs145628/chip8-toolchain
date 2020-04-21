@@ -1,7 +1,7 @@
 #define _POSIX_C_SOURCE 200809L
 
 #include "oc8_emu/cpu.h"
-#include "oc8_emu/debug.h"
+#include "oc8_debug/debug.h"
 #include "oc8_emu/input.h"
 #include "oc8_emu/mem.h"
 #include "oc8_emu/screen.h"
@@ -46,7 +46,7 @@ void oc8_emu_init() {
   oc8_emu_init_keypad();
   oc8_emu_init_mem();
   oc8_emu_init_screen();
-  oc8_emu_init_debug();
+  oc8_debug_init();
 }
 
 static void decrease_timers(unsigned val) {
@@ -86,6 +86,9 @@ void oc8_emu_cpu_step() {
     g_oc8_emu_cpu.timer_last_update +=
         (uint64_t)timer_dec * TIMER_ROUND_DURATION;
   }
+
+  // Update debugger before fetch / exec
+  oc8_debug_step();
 
   // Fecth instruction
   fetch_ins();

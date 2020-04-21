@@ -1,13 +1,12 @@
 set(SRC
   cpu.c
-  debug.c
   exec_ins.c
   input.c
   mem.c
   screen.c
 )
 add_library(oc8_emu ${SRC})
-target_link_libraries(oc8_emu oc8_is oc8_bin)
+target_link_libraries(oc8_emu oc8_is oc8_bin oc8_debug)
 
 
 set(TEST_SRC
