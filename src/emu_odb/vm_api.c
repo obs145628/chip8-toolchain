@@ -82,6 +82,9 @@ static void get_vm_infos(odb_vm_api_data_t data, odb_vm_api_error_t *err,
   out_infos->regs_count = NB_REGS;
   out_infos->memory_size = OC8_MEMORY_SIZE;
   out_infos->symbols_count = bf->syms_defs_size;
+  out_infos->pointer_size = 2;
+  out_infos->integer_size = 1;
+  out_infos->use_opcode = 1;
 }
 
 static void get_update_infos(odb_vm_api_data_t data, odb_vm_api_error_t *err,

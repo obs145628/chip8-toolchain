@@ -165,6 +165,9 @@ TEST_CASE("call_add_mem infos", "") {
           std::vector<odb::vm_reg_t>{});
 
   REQUIRE(db.get_memory_size() == 4096);
+  REQUIRE(db.pointer_size() == 2);
+  REQUIRE(db.integer_size() == 1);
+  REQUIRE(db.use_opcode() == true);
 
   REQUIRE(db.get_symbols(0, 56) == std::vector<odb::vm_sym_t>{});
   REQUIRE(db.get_symbols(512, 2) == std::vector<odb::vm_sym_t>{0});
