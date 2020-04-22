@@ -1,6 +1,7 @@
 #include <assert.h>
 #include <stdint.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 #include "oc8_emu/cpu.h"
@@ -12,6 +13,7 @@
 
 static void exec_ins_0NNN() {
   fprintf(stderr, "Instruction 0NNN not implemented. Aborting !\n");
+  exit(1);
 }
 
 static void exec_ins_00E0() {
