@@ -6,7 +6,7 @@ set(SRC
   debug.c
 )
 add_library(oc8_debug ${SRC})
-target_link_libraries(oc8_debug oc8_emu oc8_bin ${ODB_LIBS} -lstdc++)
+target_link_libraries(oc8_debug oc8_emu oc8_bin ${ODB_LIBS} -lstdc++ pthread)
 
 
 add_definitions(-DBUILD_DIR="${CMAKE_BINARY_DIR}")
@@ -20,4 +20,5 @@ set(TEST_SRC
 set(TEST_NAME utest_oc8debug.bin)
 add_executable(${TEST_NAME} EXCLUDE_FROM_ALL ${TEST_SRC})
 target_link_libraries(${TEST_NAME} oc8_debug oc8_ld oc8_as) 
+add_dependencies(${TEST_NAME} oc8-emu)
 add_dependencies(build-tests ${TEST_NAME})

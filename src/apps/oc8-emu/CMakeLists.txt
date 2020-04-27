@@ -6,4 +6,4 @@ set(SRC
   sdl-env.c
 )
 add_executable(oc8-emu ${SRC})
-target_link_libraries(oc8-emu oc8_is oc8_emu ${SDL2_LIBRARIES})
+target_link_libraries(oc8-emu oc8_is oc8_emu ${SDL2_LIBRARIES} pthread)
